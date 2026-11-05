@@ -827,19 +827,16 @@
     }
 
     function layout(force = false) {
-      const box = flow.getBoundingClientRect();
-      if (!box.width) return;
-      const rects = $$('.node', nodesEl).map((el) => {
-        const r = el.getBoundingClientRect();
-        return { x: r.left - box.left, y: r.top - box.top, w: r.width, h: r.height };
-      });
-      // nodes rise in from translateY(12px); measure where they will rest
-      const settled = flow.classList.contains('is-in') ? 0 : 12;
-      rects.forEach((r) => { r.y -= settled; });
-      const s = `${Math.round(box.width)}|${rects.map((r) => `${Math.round(r.x)},${Math.round(r.y)}`).join(';')}`;
+      if (!flow.clientWidth) return;
+      // Measure layout boxes (offsets), not on-screen rects, so the nodes' entrance transform
+      // can't skew the paths. The SVG has no viewBox: its units are CSS pixels from the flow's
+      // top-left corner, so nothing rescales when the inspector makes the panel taller.
+      const ox = nodesEl.offsetLeft, oy = nodesEl.offsetTop;
+      const rects = $$('.node', nodesEl).map((el) => ({ x: ox + el.offsetLeft, y: oy + el.offsetTop, w: el.offsetWidth, h: el.offsetHeight }));
+      const s = `${flow.clientWidth}|${rects.map((r) => `${r.x},${r.y},${r.w},${r.h}`).join(';')}`;
       if (!force && s === sig) return;
       sig = s;
-      svg.setAttribute('viewBox', `0 0 ${box.width.toFixed(1)} ${box.height.toFixed(1)}`);
+      svg.removeAttribute('viewBox');
       let html = '<defs><marker id="flowArrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="flow__arrow" d="M1 1.5 8 5 1 8.5z"/></marker></defs>';
       segs = [];
       for (let i = 0; i < rects.length - 1; i++) {
@@ -1310,7 +1307,7 @@
   }
 
   function renderContact() {
-    const mail = P.email ? `mailto:${P.email}?subject=${encodeURIComponent('Internship opportunity')}` : '';
+    const mail = P.email ? `mailto:${P.email}?subject=${encodeURIComponent('Opportunity: internship, co-op or part-time')}` : '';
     const rows = [
       { label: 'Email', icon: 'mail', value: P.email, href: mail, todo: 'Add your email to content.js', act: P.email ? `<button class="channel__act" type="button" data-copy-email>${icon('copy')}Copy</button>` : '' },
       { label: 'LinkedIn', icon: 'linkedin', value: L.linkedin && L.linkedin.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''), href: L.linkedin, todo: 'Add your LinkedIn URL', act: L.linkedin ? `<a class="channel__act" href="${esc(L.linkedin)}" ${ext}>Open${icon('arrow-up-right')}</a>` : '' },
