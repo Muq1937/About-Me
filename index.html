@@ -3,306 +3,284 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Muq · AI Engineer · Agent Skills &amp; Plugins</title>
-  <meta name="description" content="I teach AI agents new skills. AI engineer building Skills, Plugins and MCP servers for coding agents, and the full-stack products around them.">
-  <meta name="theme-color" content="#FBFBFA">
+  <title>Supanut Udompataikul · Full-stack, data and cloud developer</title>
+  <meta name="description" content="I build full-stack products and the data pipelines behind them, and run them in the cloud. A live status page for MaklomThai, Thailand Changelog and more.">
+  <meta name="theme-color" content="#F6F3EE">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Muq · AI Engineer">
-  <meta property="og:description" content="I teach AI agents new skills: Agent Skills, Plugins, MCP servers and full-stack AI apps.">
+  <meta property="og:title" content="Supanut Udompataikul · supanut.status">
+  <meta property="og:description" content="Full-stack products, the data pipelines behind them, and the cloud they run on. A portfolio that works like a live status page.">
   <meta property="og:url" content="https://muq1937.github.io/About-Me/">
   <meta property="og:image" content="https://muq1937.github.io/About-Me/assets/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@500..700&family=Figtree:ital,wght@0,300..900;1,400..700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+Thai:wght@400..700&display=swap">
+  <link rel="preconnect" href="https://thaigotracker-backend.vercel.app" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&family=Noto+Sans+Thai:wght@400..700&display=swap">
   <link rel="stylesheet" href="assets/css/styles.css">
   <script>
-    document.documentElement.classList.add('js');
-    try { var t = localStorage.getItem('theme'); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch (e) {}
+    (function () {
+      var d = document.documentElement, t = null;
+      d.classList.add('js');
+      try { t = localStorage.getItem('su-theme'); } catch (e) {}
+      if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      d.dataset.theme = t;
+      setTimeout(function () { d.classList.add('is-ready'); }, 3000); // fail-safe if main.js can't run
+    })();
   </script>
   <script src="assets/js/content.js" defer></script>
   <script src="assets/js/main.js" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <div class="scroll-progress" aria-hidden="true"><span></span></div>
+  <a class="skip" href="#main">Skip to content</a>
 
-  <!-- ============ NAV ============ -->
-  <header class="nav" id="nav">
-    <div class="nav__inner">
-      <a class="nav__brand" href="#top" aria-label="Back to top">
-        <span data-avatar="sm"></span>
-        <span class="nav__name" data-bind="name">Muq</span>
+  <!-- ============ HEADER ============ -->
+  <header class="hdr" id="hdr">
+    <div class="wrap hdr__in">
+      <a class="brand" href="#top" aria-label="supanut.status, back to the top">
+        <span class="brand__dot" id="brandDot" aria-hidden="true"></span>
+        <span class="brand__name"><span data-bind="first">supanut</span><span class="brand__tld">.status</span></span>
       </a>
-      <nav class="nav__links" aria-label="Primary">
-        <a href="#work">Work</a>
-        <a href="#lab">Skills &amp; Plugins</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
+      <nav class="nav" aria-label="Sections">
+        <a href="#services">Services</a>
+        <a href="#pipelines">Pipelines</a>
+        <a href="#analysis">Analysis</a>
+        <a href="#stack">Stack</a>
+        <a href="#compliance">Certificate</a>
+        <a href="#changelog">Changelog</a>
       </nav>
-      <div class="nav__actions">
-        <button class="nav__cmd" type="button" data-palette aria-label="Open command palette"><kbd>/</kbd><span>Commands</span></button>
-        <button class="icon-btn" type="button" id="themeToggle" aria-label="Toggle dark mode"><i data-icon="moon" class="show-light"></i><i data-icon="sun" class="show-dark"></i></button>
-        <a class="btn btn--primary btn--sm magnetic nav__hire" href="#contact">Hire me</a>
-        <button class="icon-btn nav__burger" type="button" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu"><i data-icon="menu"></i></button>
+      <div class="hdr__act">
+        <button class="search-btn" type="button" data-palette aria-label="Search and commands (press /)">
+          <i data-icon="search"></i><span>Search</span><kbd>/</kbd>
+        </button>
+        <button class="icon-btn theme-btn" id="themeBtn" type="button" aria-label="Switch to dark mode">
+          <i data-icon="sun" class="i-sun"></i><i data-icon="moon" class="i-moon"></i>
+        </button>
+        <a class="btn btn--ink btn--sm hdr__cta" href="#contact">Contact</a>
+        <button class="icon-btn menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="menu" aria-label="Open menu"><i data-icon="menu"></i></button>
       </div>
     </div>
-    <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile" hidden>
-      <a href="#work">Work</a>
-      <a href="#lab">Skills &amp; Plugins</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-      <button type="button" class="mobile-menu__cmd" data-palette><kbd>/</kbd> Open commands</button>
+    <div class="hdr__progress" aria-hidden="true"><span></span></div>
+    <nav class="menu" id="menu" aria-label="Sections" hidden>
+      <a href="#services"><span>01</span>Services</a>
+      <a href="#pipelines"><span>02</span>Pipelines</a>
+      <a href="#analysis"><span>03</span>Analysis</a>
+      <a href="#stack"><span>04</span>Stack</a>
+      <a href="#compliance"><span>05</span>Certificate</a>
+      <a href="#changelog"><span>06</span>Changelog</a>
+      <a href="#contact"><span>07</span>Contact</a>
     </nav>
   </header>
 
   <main id="main">
-    <!-- ============ HERO ============ -->
+    <!-- ============ OVERVIEW ============ -->
     <section class="hero" id="top" aria-labelledby="heroTitle">
       <div class="hero__bg" aria-hidden="true"></div>
-      <div class="hero__cards" id="heroCards" aria-hidden="true"></div>
-
-      <div class="hero__content">
-        <a class="status-pill" href="#contact">
-          <span class="dot" aria-hidden="true"></span>
-          <span data-bind="status">Open to work</span>
-          <span class="status-pill__sep" aria-hidden="true"></span>
-          <span class="status-pill__detail" data-bind="statusDetail">AI Engineer roles</span>
-          <i data-icon="arrow-right"></i>
-        </a>
-
-        <h1 class="hero__title" id="heroTitle">
-          <span class="w" style="--i:0">I</span> <span class="w" style="--i:1">teach</span> <span class="w" style="--i:2">AI</span> <span class="w" style="--i:3">agents</span><br>
-          <span class="w" style="--i:4">new</span> <span class="w hl" style="--i:5"><span class="grad-text">skills</span><svg class="scribble" viewBox="0 0 240 28" aria-hidden="true"><path pathLength="1" d="M4 15C62 7 152 4 236 9C168 11 96 15 38 23"/></svg></span><span class="w" style="--i:6">.</span>
-        </h1>
-
-        <p class="hero__sub">AI engineer building <strong>Skills</strong>, <strong>Plugins</strong> &amp; <strong>MCP servers</strong> for coding agents, and the full-stack products around them.</p>
-
-        <div class="hero__ctas">
-          <a class="btn btn--primary btn--lg magnetic" href="#work">See my work <i data-icon="arrow-right" class="i--end"></i></a>
-          <a class="btn btn--outline btn--lg" href="#lab"><span class="play-dot"><i data-icon="play"></i></span>Watch a skill run</a>
+      <div class="wrap hero__grid">
+        <div class="hero__copy">
+          <p class="status-pill" data-enter="0">
+            <span class="dot dot--ok" id="heroDot"></span>
+            <span id="heroStatus">All systems normal</span>
+            <span class="status-pill__sep" aria-hidden="true"></span>
+            <span class="mono"><span data-bind="city">Bangkok</span> <time id="heroClock">--:--</time></span>
+          </p>
+          <h1 class="hero__title" id="heroTitle">I build full-stack products and the data pipelines behind them, and run them in the cloud.</h1>
+          <p class="hero__lead" data-bind="lead" data-enter="3">This portfolio is a status page for the things I’ve built and still run.</p>
+          <div class="owner" data-enter="4">
+            <span class="owner__avatar" aria-hidden="true" data-bind="initials">SU</span>
+            <span class="owner__text">
+              <strong data-bind="name">Supanut Udompataikul</strong>
+              <span data-bind="status">Open to full-stack, data and cloud roles</span>
+            </span>
+          </div>
+          <div class="hero__cta" data-enter="5">
+            <a class="btn btn--ink" href="#services">Browse services <i data-icon="arrow-down"></i></a>
+            <a class="btn btn--ghost" href="#contact">Get in touch</a>
+          </div>
         </div>
 
-        <ul class="hero__stats" id="heroStats" aria-label="At a glance"></ul>
-      </div>
-
-      <div class="hero__strip" aria-hidden="true"><div class="hero__strip-track" id="heroStrip"></div></div>
-
-      <a class="scroll-cue" href="#work"><span>Scroll down</span><i data-icon="chevrons-down"></i></a>
-    </section>
-
-    <!-- ============ SHOWCASE ============ -->
-    <section class="showcase" id="work" aria-labelledby="workTitle">
-      <div class="section-head container" data-reveal>
-        <p class="eyebrow"><span class="eyebrow__dot"></span>Selected work</p>
-        <h2 class="h2" id="workTitle">Agents are only as good as their <span class="ink-underline">skills<svg viewBox="0 0 240 28" aria-hidden="true"><path pathLength="1" d="M4 15C62 7 152 4 236 9C168 11 96 15 38 23"/></svg></span>.</h2>
-        <p class="lead">I build those skills, plus the plugins, apps and evals around them. Scroll through the hats I wear.</p>
-      </div>
-
-      <div class="marquee" aria-hidden="true">
-        <div class="marquee__row"><div class="marquee__track" id="marquee1"></div></div>
-        <div class="marquee__row marquee__row--rev"><div class="marquee__track" id="marquee2"></div></div>
-      </div>
-
-      <div class="sc-track" id="scTrack">
-        <div class="sc-sticky">
-          <div class="sc-side">
-            <p class="sc-count"><b id="scIndex">01</b> / <span id="scTotal">04</span></p>
-            <div class="sc-list" id="scList" role="tablist" aria-label="Work categories"></div>
-            <p class="sc-hint">Scroll to explore <i data-icon="arrow-down"></i></p>
-            <div class="sc-bar" aria-hidden="true"><span></span></div>
+        <div class="console" id="console" role="region" aria-labelledby="consoleTitle" data-enter="2">
+          <div class="console__bar">
+            <span class="console__lights" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="console__path mono" id="consoleTitle"><span data-bind="host">supanut.status</span>/overview</span>
+            <span class="live-tag mono"><span class="dot dot--ok"></span>live</span>
           </div>
-          <div class="device">
-            <div class="device__screen" id="scScreen"></div>
+          <div class="console__sum" id="sum" data-state="pending">
+            <span class="sum__icon" aria-hidden="true"><i data-icon="check" class="i-ok"></i><i data-icon="alert" class="i-warn"></i><span class="sum__spin"></span></span>
+            <span class="sum__text">
+              <strong id="sumTitle">Checking services…</strong>
+              <span class="mono" id="sumSub">asking from your browser</span>
+            </span>
+            <span class="sum__ago mono" id="sumAgo" aria-hidden="true"></span>
+          </div>
+          <ul class="checks" id="checks" aria-label="Health checks"></ul>
+          <div class="console__log">
+            <div class="log__head mono"><span>events</span><span>tail -f</span></div>
+            <ol class="log mono" id="log" aria-label="Recent events"></ol>
           </div>
         </div>
       </div>
+
+      <div class="wrap">
+        <ul class="telemetry" id="telemetry" aria-label="Key numbers"></ul>
+      </div>
     </section>
 
-    <!-- ============ DARK ZONE: problems → lab → capabilities ============ -->
-    <section class="dark-zone" id="lab" data-nav="dark" aria-labelledby="painTitle">
-      <div class="dz-glow" aria-hidden="true"></div>
-
-      <div class="container pain">
-        <div class="section-head section-head--dark" data-reveal>
-          <h2 class="h2" id="painTitle">Out of the box, agents don't know your team.</h2>
-          <p class="lead">They miss your conventions, can't reach your tools and repeat the same chores. Sound familiar?</p>
+    <!-- ============ 01 SERVICES ============ -->
+    <section class="section" id="services" aria-labelledby="servicesTitle">
+      <div class="wrap">
+        <header class="sec-head" data-reveal>
+          <p class="eyebrow mono"><span>01</span>Services</p>
+          <h2 id="servicesTitle">Things I’ve built and keep running</h2>
+          <p class="sec-lead">Two live products and a team data project. Each one is full-stack, data or cloud work, and usually all three.</p>
+        </header>
+        <div class="focus-bar" data-reveal>
+          <span class="focus-bar__label mono">Highlight</span>
+          <div class="seg" id="focusSeg" role="group" aria-label="Highlight services by area">
+            <span class="seg__ind" aria-hidden="true"></span>
+          </div>
         </div>
-        <div class="notes" id="notes"></div>
-        <p class="pain__turn hand" data-reveal>so I teach them
-          <svg viewBox="0 0 120 60" aria-hidden="true"><path d="M6 8c18 30 52 42 96 36"/><path d="M90 34l13 10-14 8"/></svg>
-        </p>
+        <div class="svc-grid" id="svcGrid"></div>
       </div>
+    </section>
 
-      <div class="container lab" id="labDemo">
-        <div class="section-head section-head--dark" data-reveal>
-          <p class="eyebrow eyebrow--dark"><span class="eyebrow__dot"></span>Skills &amp; plugins lab</p>
-          <h2 class="h2">Pick one. Watch it <span class="grad-text">work</span>.</h2>
-          <p class="lead">Each demo replays an agent session step by step. Peek at the source behind it, or the video walkthrough.</p>
-        </div>
-
-        <div class="lab__grid" data-reveal>
-          <div class="lab__list" id="skillList" role="tablist" aria-label="Skills and plugins"></div>
-
-          <div class="term" id="term">
-            <div class="term__bar">
-              <span class="term__dots" aria-hidden="true"><i></i><i></i><i></i></span>
-              <span class="term__title" id="termTitle">agent · ~/acme-app</span>
-              <div class="term__tabs" role="tablist" aria-label="View">
-                <button class="term__tab is-active" type="button" role="tab" aria-selected="true" data-tab="demo"><i data-icon="play"></i>Demo</button>
-                <button class="term__tab" type="button" role="tab" aria-selected="false" data-tab="source"><i data-icon="code"></i>Source</button>
-                <button class="term__tab" type="button" role="tab" aria-selected="false" data-tab="video"><i data-icon="video"></i>Video</button>
+    <!-- ============ 02 PIPELINES ============ -->
+    <section class="section section--alt" id="pipelines" aria-labelledby="pipesTitle">
+      <div class="wrap">
+        <header class="sec-head" data-reveal>
+          <p class="eyebrow mono"><span>02</span>Pipelines</p>
+          <h2 id="pipesTitle">How the data moves</h2>
+          <p class="sec-lead">Pick a pipeline, then pick a step to see what it does and how it’s configured. The moving dots show the shape of a run, not live traffic.</p>
+        </header>
+        <div class="pipes" data-reveal>
+          <div class="pipes__tabs" id="pipeTabs" role="tablist" aria-label="Pipelines"></div>
+          <div class="pipe" id="pipePanel" role="tabpanel">
+            <div class="pipe__head">
+              <span class="pipe__file mono" id="pipeFile"></span>
+              <span class="pipe__sched mono" id="pipeSched"></span>
+              <p class="pipe__summary" id="pipeSummary"></p>
+            </div>
+            <div class="pipe__body">
+              <div class="flow" id="flow">
+                <svg class="flow__svg" id="flowSvg" aria-hidden="true"></svg>
+                <ol class="flow__nodes" id="flowNodes" aria-label="Steps"></ol>
+                <p class="flow__tally mono" id="flowTally" aria-hidden="true"></p>
               </div>
-            </div>
-            <div class="term__body">
-              <div class="term__panel is-active" data-panel="demo"><div class="term__screen" id="termScreen"></div></div>
-              <div class="term__panel" data-panel="source"><div class="term__source" id="termSource"></div></div>
-              <div class="term__panel" data-panel="video"><div class="term__video" id="termVideo"></div></div>
-            </div>
-            <div class="term__foot">
-              <div class="term__progress" aria-hidden="true"><span id="termProgress"></span></div>
-              <button class="term__replay" id="termReplay" type="button"><i data-icon="replay"></i>Replay</button>
+              <aside class="inspector" id="inspector" aria-live="polite"></aside>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="container caps">
-        <div class="section-head section-head--dark" data-reveal>
-          <p class="eyebrow eyebrow--dark"><span class="eyebrow__dot"></span>What I bring</p>
-          <h2 class="h2">One engineer, the whole loop.</h2>
-        </div>
-
-        <article class="cap" data-reveal>
-          <div class="cap__visual grain grain--blue">
-            <div class="mock mock-skill">
-              <div class="mock__head"><span class="mock__file"><i data-icon="file"></i>SKILL.md</span><span class="mock__chip">v2</span></div>
-              <dl class="mock-skill__fields">
-                <div><dt>name</dt><dd><code>pr-review</code></dd></div>
-                <div><dt>description</dt><dd class="type" data-type="Reviews a GitHub PR like a senior engineer. Use when the user asks for a review, a diff check or feedback before merging."></dd></div>
-              </dl>
-              <div class="mock-skill__tests">
-                <div class="mock-skill__th"><span>Trigger tests</span><b class="score"><span data-count-to="10">0</span>/10</b></div>
-                <ul>
-                  <li style="--i:0"><i class="tick"></i><span>“can you review PR 42?”</span><em class="pos">fires</em></li>
-                  <li style="--i:1"><i class="tick"></i><span>“check this diff before I merge”</span><em class="pos">fires</em></li>
-                  <li style="--i:2"><i class="tick"></i><span>“write a haiku about git”</span><em class="neg">stays quiet</em></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="cap__text">
-            <h3 class="cap__title"><b>Design</b> skills agents actually <span class="grad-text">trigger</span></h3>
-            <p>Tight descriptions, clear steps and trigger tests that prove a skill fires when it should and stays quiet when it shouldn't.</p>
-            <ul class="cap__chips"><li>SKILL.md</li><li>Plugins</li><li>MCP</li><li>Hooks</li></ul>
-          </div>
-        </article>
-
-        <article class="cap cap--rev" data-reveal>
-          <div class="cap__visual grain grain--mint">
-            <div class="mock mock-ship">
-              <div class="mock__head"><span class="mock__file"><i data-icon="rocket"></i>deploy · main@7f3c2a1</span><span class="mock__chip mock__chip--live">live</span></div>
-              <ol class="pipeline">
-                <li style="--d:0"><i></i><span>Install</span><em>12s</em></li>
-                <li style="--d:1"><i></i><span>Lint &amp; typecheck</span><em>8s</em></li>
-                <li style="--d:2"><i></i><span>Tests · 24 passed</span><em>41s</em></li>
-                <li style="--d:3"><i></i><span>Build</span><em>19s</em></li>
-                <li style="--d:4"><i></i><span>Deploy to production</span><em>9s</em></li>
-              </ol>
-              <div class="mock-ship__url"><span class="dot"></span>app.example.dev is live</div>
-            </div>
-          </div>
-          <div class="cap__text">
-            <h3 class="cap__title"><b>Ship</b> products from idea to <span class="grad-text">production</span></h3>
-            <p>Interfaces, APIs, data and CI/CD. I own features end to end and do the boring parts properly.</p>
-            <ul class="cap__chips"><li>React</li><li>FastAPI</li><li>PostgreSQL</li><li>CI/CD</li></ul>
-          </div>
-        </article>
-
-        <article class="cap" data-reveal>
-          <div class="cap__visual grain grain--peach">
-            <div class="mock mock-eval">
-              <div class="mock__head"><span class="mock__file"><i data-icon="chart"></i>eval · support-bot v3 vs v2</span><span class="mock__chip">+38%</span></div>
-              <div class="bars">
-                <div class="bars__g"><span class="b b--old" style="--v:.58"></span><span class="b b--new" style="--v:.91"></span><label>Accuracy</label></div>
-                <div class="bars__g"><span class="b b--old" style="--v:.49"></span><span class="b b--new" style="--v:.88"></span><label>Grounded</label></div>
-                <div class="bars__g"><span class="b b--old" style="--v:.62"></span><span class="b b--new" style="--v:.84"></span><label>Tool use</label></div>
-                <div class="bars__g"><span class="b b--old" style="--v:.71"></span><span class="b b--new" style="--v:.96"></span><label>Format</label></div>
-              </div>
-              <div class="legend"><span><i class="old"></i>v2</span><span><i class="new"></i>v3</span></div>
-            </div>
-          </div>
-          <div class="cap__text">
-            <h3 class="cap__title"><b>Measure</b> before you <span class="grad-text">trust</span></h3>
-            <p>Evals, benchmarks and dashboards wired into CI, so every prompt change is a measured bet instead of a vibe.</p>
-            <ul class="cap__chips"><li>Evals</li><li>RAG</li><li>Benchmarks</li><li>Dashboards</li></ul>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- ============ ABOUT ============ -->
-    <section class="about container" id="about" aria-labelledby="aboutTitle">
-      <div class="section-head" data-reveal>
-        <p class="eyebrow"><span class="eyebrow__dot"></span>About</p>
-        <h2 class="h2" id="aboutTitle">The person behind the prompts.</h2>
-      </div>
-      <div class="about__grid">
-        <aside class="about-card spot" data-reveal>
-          <div class="about-card__top">
-            <span data-avatar="xl" data-online></span>
-            <span class="hand about-card__me"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M56 12C42 4 20 6 8 26"/><path d="M7 16 8 26l9-4"/></svg>that's me!</span>
-          </div>
-          <h3 class="about-card__name" data-bind="name">Muq</h3>
-          <p class="about-card__role"><span data-bind="role">AI Engineer</span> · <span data-bind="location">Remote-friendly</span></p>
-          <div class="about-card__bio" id="aboutBio"></div>
-          <p class="about-card__now"><span class="dot" aria-hidden="true"></span><span>Now: <span data-bind="now">Building</span></span></p>
-          <div class="about-card__links" id="aboutLinks"></div>
-        </aside>
-        <div class="about__main">
-          <div class="timeline-wrap" id="timelineWrap"><span class="timeline__fill" aria-hidden="true"></span><ol class="timeline" id="timeline"></ol></div>
-          <div class="toolbox" id="toolbox"></div>
         </div>
       </div>
     </section>
 
-    <!-- ============ CONTACT ============ -->
-    <section class="contact container" id="contact" aria-labelledby="contactTitle">
-      <div class="contact__panel" data-nav="dark" data-reveal>
-        <div class="contact__orbs" aria-hidden="true"><i></i><i></i><i></i></div>
-        <p class="hand contact__note">psst… I reply fast</p>
-        <h2 class="contact__title" id="contactTitle">Let's build something your agents will <span class="grad-text">love</span>.</h2>
-        <p class="contact__lead">Open to AI engineering roles, internships and interesting collaborations.</p>
-        <div class="contact__actions" id="contactActions"></div>
-        <button class="contact__mail" type="button" data-copy-email><span data-bind="email">hello@example.com</span><i data-icon="copy"></i></button>
+    <!-- ============ 03 ANALYSIS ============ -->
+    <section class="section" id="analysis" aria-labelledby="analysisTitle">
+      <div class="wrap analysis">
+        <div class="dial" id="dialWrap" data-reveal>
+          <canvas class="dial__canvas" id="dial" tabindex="0" role="img" aria-label="A dial of 576 ticks, one per player in the loop"></canvas>
+          <div class="dial__center" aria-hidden="true">
+            <span class="dial__kicker mono" id="dialKicker">longest loop</span>
+            <strong class="dial__num" id="dialNum">576</strong>
+            <span class="dial__label" id="dialLabel">players, each beat the next</span>
+            <span class="dial__sub mono" id="dialSub">proven longest</span>
+          </div>
+          <button class="dial__replay mono" id="dialReplay" type="button"><i data-icon="replay"></i>Replay</button>
+          <p class="sr-only" id="dialLive" aria-live="polite"></p>
+        </div>
+        <div class="analysis__copy">
+          <header class="sec-head" data-reveal>
+            <p class="eyebrow mono"><span>03</span>Analysis</p>
+            <h2 id="analysisTitle">One loop of 576 wins</h2>
+            <p class="sec-lead" id="analysisLead"></p>
+          </header>
+          <ol class="steps" id="analysisSteps"></ol>
+          <p class="analysis__note mono" id="analysisNote" data-reveal></p>
+          <p class="analysis__hint" data-reveal><i data-icon="info"></i><span>Hover over the dial, or focus it and use the arrow keys, to walk the loop one step at a time.</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 04 STACK ============ -->
+    <section class="section section--alt" id="stack" aria-labelledby="stackTitle">
+      <div class="wrap">
+        <header class="sec-head" data-reveal>
+          <p class="eyebrow mono"><span>04</span>Stack</p>
+          <h2 id="stackTitle">Runtime and dependencies</h2>
+          <p class="sec-lead">The tools I’ve shipped with, grouped by area. Each one lists the projects that use it.</p>
+        </header>
+        <div class="stack" id="stackGrid"></div>
+      </div>
+    </section>
+
+    <!-- ============ 05 COMPLIANCE ============ -->
+    <section class="section" id="compliance" aria-labelledby="certTitle">
+      <div class="wrap">
+        <header class="sec-head" data-reveal>
+          <p class="eyebrow mono"><span>05</span>Compliance</p>
+          <h2 id="certTitle">Certified on the cloud side, too</h2>
+        </header>
+        <div id="certs"></div>
+      </div>
+    </section>
+
+    <!-- ============ 06 CHANGELOG ============ -->
+    <section class="section section--alt" id="changelog" aria-labelledby="clTitle">
+      <div class="wrap changelog">
+        <header class="sec-head" data-reveal>
+          <p class="eyebrow mono"><span>06</span>Changelog</p>
+          <h2 id="clTitle">Release notes</h2>
+          <p class="sec-lead">What shipped, what I learned and what changed, newest first.</p>
+        </header>
+        <ol class="releases" id="releases"></ol>
+      </div>
+    </section>
+
+    <!-- ============ 07 CONTACT ============ -->
+    <section class="section contact" id="contact" aria-labelledby="contactTitle">
+      <div class="wrap">
+        <div class="ticket" data-reveal>
+          <div class="ticket__copy">
+            <p class="eyebrow mono"><span>07</span>Contact</p>
+            <h2 id="contactTitle">Got a role in mind? Open a ticket.</h2>
+            <p>I’m looking for internships in full-stack, data and cloud engineering. Email is the fastest way to reach me.</p>
+            <div class="ticket__cta" id="ticketCta"></div>
+            <p class="ticket__meta mono"><i data-icon="map-pin"></i><span data-bind="where">Thailand · UTC+7</span></p>
+          </div>
+          <ul class="channels" id="channels" aria-label="Ways to reach me"></ul>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer class="footer container">
-    <p>© <span id="year">2026</span> <span data-bind="name">Muq</span>. Designed &amp; built by hand.</p>
-    <div class="footer__right">
-      <button type="button" data-palette>Press <kbd>/</kbd> for commands</button>
-      <a href="#top">Back to top <i data-icon="arrow-up"></i></a>
+  <footer class="foot">
+    <div class="wrap foot__in">
+      <p class="mono"><span class="brand__dot" aria-hidden="true"></span><span data-bind="host">supanut.status</span> · a static site with no framework, served by GitHub Pages</p>
+      <p class="mono">Last deployed <time id="deployed">—</time> · © <span id="year">2026</span> <span data-bind="name">Supanut Udompataikul</span></p>
+      <a class="foot__top mono" href="#top">Back to top <i data-icon="arrow-up-right"></i></a>
     </div>
   </footer>
 
-  <!-- ============ OVERLAYS ============ -->
-  <dialog class="modal" id="modal" aria-labelledby="modalTitle">
-    <button class="icon-btn modal__close" type="button" data-close aria-label="Close"><i data-icon="x"></i></button>
-    <div class="modal__body" id="modalBody"></div>
+  <!-- ============ DIALOGS ============ -->
+  <dialog class="sheet" id="sheet" aria-labelledby="sheetTitle">
+    <div class="sheet__in" id="sheetBody"></div>
   </dialog>
 
-  <dialog class="palette" id="palette" aria-label="Command palette">
-    <div class="palette__input">
-      <span class="palette__slash" aria-hidden="true">/</span>
-      <input id="paletteInput" type="text" placeholder="Type a command or search…" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="true" aria-controls="paletteList" aria-autocomplete="list">
+  <dialog class="sheet sheet--cert" id="certDlg" aria-labelledby="certDlgTitle">
+    <div class="sheet__in" id="certDlgBody"></div>
+  </dialog>
+
+  <dialog class="palette" id="palette" aria-label="Search and commands">
+    <div class="palette__in">
+      <span class="palette__ps mono" aria-hidden="true"><span data-bind="host">supanut.status</span> ›</span>
+      <input id="paletteInput" type="text" placeholder="Jump to a section, open a service…" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="true" aria-controls="paletteList" aria-autocomplete="list" aria-label="Search">
     </div>
-    <ul class="palette__list" id="paletteList" role="listbox"></ul>
-    <div class="palette__foot"><span><kbd>↑</kbd><kbd>↓</kbd> navigate</span><span><kbd>↵</kbd> run</span><span><kbd>esc</kbd> close</span></div>
+    <ul class="palette__list" id="paletteList" role="listbox" aria-label="Results"></ul>
+    <div class="palette__foot mono"><span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>↵</kbd> open</span><span><kbd>esc</kbd> close</span></div>
   </dialog>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <noscript><p class="noscript">This page builds itself with JavaScript. Turn it on to see the projects, or visit <a href="https://github.com/Muq1937">github.com/Muq1937</a>.</p></noscript>
 </body>
 </html>
