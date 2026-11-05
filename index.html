@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Muq · AI Engineer · Agent Skills &amp; Plugins</title>
+  <meta name="description" content="I teach AI agents new skills. AI engineer building Skills, Plugins and MCP servers for coding agents, and the full-stack products around them.">
+  <meta name="theme-color" content="#FBFBFA">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Muq · AI Engineer">
+  <meta property="og:description" content="I teach AI agents new skills: Agent Skills, Plugins, MCP servers and full-stack AI apps.">
+  <meta property="og:url" content="https://muq1937.github.io/About-Me/">
+  <meta property="og:image" content="https://muq1937.github.io/About-Me/assets/img/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@500..700&family=Figtree:ital,wght@0,300..900;1,400..700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+Thai:wght@400..700&display=swap">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script>
+    document.documentElement.classList.add('js');
+    try { var t = localStorage.getItem('theme'); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+  <script src="assets/js/content.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="scroll-progress" aria-hidden="true"><span></span></div>
+
+  <!-- ============ NAV ============ -->
+  <header class="nav" id="nav">
+    <div class="nav__inner">
+      <a class="nav__brand" href="#top" aria-label="Back to top">
+        <span data-avatar="sm"></span>
+        <span class="nav__name" data-bind="name">Muq</span>
+      </a>
+      <nav class="nav__links" aria-label="Primary">
+        <a href="#work">Work</a>
+        <a href="#lab">Skills &amp; Plugins</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="nav__actions">
+        <button class="nav__cmd" type="button" data-palette aria-label="Open command palette"><kbd>/</kbd><span>Commands</span></button>
+        <button class="icon-btn" type="button" id="themeToggle" aria-label="Toggle dark mode"><i data-icon="moon" class="show-light"></i><i data-icon="sun" class="show-dark"></i></button>
+        <a class="btn btn--primary btn--sm magnetic nav__hire" href="#contact">Hire me</a>
+        <button class="icon-btn nav__burger" type="button" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu"><i data-icon="menu"></i></button>
+      </div>
+    </div>
+    <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile" hidden>
+      <a href="#work">Work</a>
+      <a href="#lab">Skills &amp; Plugins</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <button type="button" class="mobile-menu__cmd" data-palette><kbd>/</kbd> Open commands</button>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="top" aria-labelledby="heroTitle">
+      <div class="hero__bg" aria-hidden="true"></div>
+      <div class="hero__cards" id="heroCards" aria-hidden="true"></div>
+
+      <div class="hero__content">
+        <a class="status-pill" href="#contact">
+          <span class="dot" aria-hidden="true"></span>
+          <span data-bind="status">Open to work</span>
+          <span class="status-pill__sep" aria-hidden="true"></span>
+          <span class="status-pill__detail" data-bind="statusDetail">AI Engineer roles</span>
+          <i data-icon="arrow-right"></i>
+        </a>
+
+        <h1 class="hero__title" id="heroTitle">
+          <span class="w" style="--i:0">I</span> <span class="w" style="--i:1">teach</span> <span class="w" style="--i:2">AI</span> <span class="w" style="--i:3">agents</span><br>
+          <span class="w" style="--i:4">new</span> <span class="w hl" style="--i:5"><span class="grad-text">skills</span><svg class="scribble" viewBox="0 0 240 28" aria-hidden="true"><path pathLength="1" d="M4 15C62 7 152 4 236 9C168 11 96 15 38 23"/></svg></span><span class="w" style="--i:6">.</span>
+        </h1>
+
+        <p class="hero__sub">AI engineer building <strong>Skills</strong>, <strong>Plugins</strong> &amp; <strong>MCP servers</strong> for coding agents, and the full-stack products around them.</p>
+
+        <div class="hero__ctas">
+          <a class="btn btn--primary btn--lg magnetic" href="#work">See my work <i data-icon="arrow-right" class="i--end"></i></a>
+          <a class="btn btn--outline btn--lg" href="#lab"><span class="play-dot"><i data-icon="play"></i></span>Watch a skill run</a>
+        </div>
+
+        <ul class="hero__stats" id="heroStats" aria-label="At a glance"></ul>
+      </div>
+
+      <div class="hero__strip" aria-hidden="true"><div class="hero__strip-track" id="heroStrip"></div></div>
+
+      <a class="scroll-cue" href="#work"><span>Scroll down</span><i data-icon="chevrons-down"></i></a>
+    </section>
+
+    <!-- ============ SHOWCASE ============ -->
+    <section class="showcase" id="work" aria-labelledby="workTitle">
+      <div class="section-head container" data-reveal>
+        <p class="eyebrow"><span class="eyebrow__dot"></span>Selected work</p>
+        <h2 class="h2" id="workTitle">Agents are only as good as their <span class="ink-underline">skills<svg viewBox="0 0 240 28" aria-hidden="true"><path pathLength="1" d="M4 15C62 7 152 4 236 9C168 11 96 15 38 23"/></svg></span>.</h2>
+        <p class="lead">I build those skills, plus the plugins, apps and evals around them. Scroll through the hats I wear.</p>
+      </div>
+
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee__row"><div class="marquee__track" id="marquee1"></div></div>
+        <div class="marquee__row marquee__row--rev"><div class="marquee__track" id="marquee2"></div></div>
+      </div>
+
+      <div class="sc-track" id="scTrack">
+        <div class="sc-sticky">
+          <div class="sc-side">
+            <p class="sc-count"><b id="scIndex">01</b> / <span id="scTotal">04</span></p>
+            <div class="sc-list" id="scList" role="tablist" aria-label="Work categories"></div>
+            <p class="sc-hint">Scroll to explore <i data-icon="arrow-down"></i></p>
+            <div class="sc-bar" aria-hidden="true"><span></span></div>
+          </div>
+          <div class="device">
+            <div class="device__screen" id="scScreen"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ DARK ZONE: problems → lab → capabilities ============ -->
+    <section class="dark-zone" id="lab" data-nav="dark" aria-labelledby="painTitle">
+      <div class="dz-glow" aria-hidden="true"></div>
+
+      <div class="container pain">
+        <div class="section-head section-head--dark" data-reveal>
+          <h2 class="h2" id="painTitle">Out of the box, agents don't know your team.</h2>
+          <p class="lead">They miss your conventions, can't reach your tools and repeat the same chores. Sound familiar?</p>
+        </div>
+        <div class="notes" id="notes"></div>
+        <p class="pain__turn hand" data-reveal>so I teach them
+          <svg viewBox="0 0 120 60" aria-hidden="true"><path d="M6 8c18 30 52 42 96 36"/><path d="M90 34l13 10-14 8"/></svg>
+        </p>
+      </div>
+
+      <div class="container lab" id="labDemo">
+        <div class="section-head section-head--dark" data-reveal>
+          <p class="eyebrow eyebrow--dark"><span class="eyebrow__dot"></span>Skills &amp; plugins lab</p>
+          <h2 class="h2">Pick one. Watch it <span class="grad-text">work</span>.</h2>
+          <p class="lead">Each demo replays an agent session step by step. Peek at the source behind it, or the video walkthrough.</p>
+        </div>
+
+        <div class="lab__grid" data-reveal>
+          <div class="lab__list" id="skillList" role="tablist" aria-label="Skills and plugins"></div>
+
+          <div class="term" id="term">
+            <div class="term__bar">
+              <span class="term__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="term__title" id="termTitle">agent · ~/acme-app</span>
+              <div class="term__tabs" role="tablist" aria-label="View">
+                <button class="term__tab is-active" type="button" role="tab" aria-selected="true" data-tab="demo"><i data-icon="play"></i>Demo</button>
+                <button class="term__tab" type="button" role="tab" aria-selected="false" data-tab="source"><i data-icon="code"></i>Source</button>
+                <button class="term__tab" type="button" role="tab" aria-selected="false" data-tab="video"><i data-icon="video"></i>Video</button>
+              </div>
+            </div>
+            <div class="term__body">
+              <div class="term__panel is-active" data-panel="demo"><div class="term__screen" id="termScreen"></div></div>
+              <div class="term__panel" data-panel="source"><div class="term__source" id="termSource"></div></div>
+              <div class="term__panel" data-panel="video"><div class="term__video" id="termVideo"></div></div>
+            </div>
+            <div class="term__foot">
+              <div class="term__progress" aria-hidden="true"><span id="termProgress"></span></div>
+              <button class="term__replay" id="termReplay" type="button"><i data-icon="replay"></i>Replay</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container caps">
+        <div class="section-head section-head--dark" data-reveal>
+          <p class="eyebrow eyebrow--dark"><span class="eyebrow__dot"></span>What I bring</p>
+          <h2 class="h2">One engineer, the whole loop.</h2>
+        </div>
+
+        <article class="cap" data-reveal>
+          <div class="cap__visual grain grain--blue">
+            <div class="mock mock-skill">
+              <div class="mock__head"><span class="mock__file"><i data-icon="file"></i>SKILL.md</span><span class="mock__chip">v2</span></div>
+              <dl class="mock-skill__fields">
+                <div><dt>name</dt><dd><code>pr-review</code></dd></div>
+                <div><dt>description</dt><dd class="type" data-type="Reviews a GitHub PR like a senior engineer. Use when the user asks for a review, a diff check or feedback before merging."></dd></div>
+              </dl>
+              <div class="mock-skill__tests">
+                <div class="mock-skill__th"><span>Trigger tests</span><b class="score"><span data-count-to="10">0</span>/10</b></div>
+                <ul>
+                  <li style="--i:0"><i class="tick"></i><span>“can you review PR 42?”</span><em class="pos">fires</em></li>
+                  <li style="--i:1"><i class="tick"></i><span>“check this diff before I merge”</span><em class="pos">fires</em></li>
+                  <li style="--i:2"><i class="tick"></i><span>“write a haiku about git”</span><em class="neg">stays quiet</em></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="cap__text">
+            <h3 class="cap__title"><b>Design</b> skills agents actually <span class="grad-text">trigger</span></h3>
+            <p>Tight descriptions, clear steps and trigger tests that prove a skill fires when it should and stays quiet when it shouldn't.</p>
+            <ul class="cap__chips"><li>SKILL.md</li><li>Plugins</li><li>MCP</li><li>Hooks</li></ul>
+          </div>
+        </article>
+
+        <article class="cap cap--rev" data-reveal>
+          <div class="cap__visual grain grain--mint">
+            <div class="mock mock-ship">
+              <div class="mock__head"><span class="mock__file"><i data-icon="rocket"></i>deploy · main@7f3c2a1</span><span class="mock__chip mock__chip--live">live</span></div>
+              <ol class="pipeline">
+                <li style="--d:0"><i></i><span>Install</span><em>12s</em></li>
+                <li style="--d:1"><i></i><span>Lint &amp; typecheck</span><em>8s</em></li>
+                <li style="--d:2"><i></i><span>Tests · 24 passed</span><em>41s</em></li>
+                <li style="--d:3"><i></i><span>Build</span><em>19s</em></li>
+                <li style="--d:4"><i></i><span>Deploy to production</span><em>9s</em></li>
+              </ol>
+              <div class="mock-ship__url"><span class="dot"></span>app.example.dev is live</div>
+            </div>
+          </div>
+          <div class="cap__text">
+            <h3 class="cap__title"><b>Ship</b> products from idea to <span class="grad-text">production</span></h3>
+            <p>Interfaces, APIs, data and CI/CD. I own features end to end and do the boring parts properly.</p>
+            <ul class="cap__chips"><li>React</li><li>FastAPI</li><li>PostgreSQL</li><li>CI/CD</li></ul>
+          </div>
+        </article>
+
+        <article class="cap" data-reveal>
+          <div class="cap__visual grain grain--peach">
+            <div class="mock mock-eval">
+              <div class="mock__head"><span class="mock__file"><i data-icon="chart"></i>eval · support-bot v3 vs v2</span><span class="mock__chip">+38%</span></div>
+              <div class="bars">
+                <div class="bars__g"><span class="b b--old" style="--v:.58"></span><span class="b b--new" style="--v:.91"></span><label>Accuracy</label></div>
+                <div class="bars__g"><span class="b b--old" style="--v:.49"></span><span class="b b--new" style="--v:.88"></span><label>Grounded</label></div>
+                <div class="bars__g"><span class="b b--old" style="--v:.62"></span><span class="b b--new" style="--v:.84"></span><label>Tool use</label></div>
+                <div class="bars__g"><span class="b b--old" style="--v:.71"></span><span class="b b--new" style="--v:.96"></span><label>Format</label></div>
+              </div>
+              <div class="legend"><span><i class="old"></i>v2</span><span><i class="new"></i>v3</span></div>
+            </div>
+          </div>
+          <div class="cap__text">
+            <h3 class="cap__title"><b>Measure</b> before you <span class="grad-text">trust</span></h3>
+            <p>Evals, benchmarks and dashboards wired into CI, so every prompt change is a measured bet instead of a vibe.</p>
+            <ul class="cap__chips"><li>Evals</li><li>RAG</li><li>Benchmarks</li><li>Dashboards</li></ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section class="about container" id="about" aria-labelledby="aboutTitle">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow"><span class="eyebrow__dot"></span>About</p>
+        <h2 class="h2" id="aboutTitle">The person behind the prompts.</h2>
+      </div>
+      <div class="about__grid">
+        <aside class="about-card spot" data-reveal>
+          <div class="about-card__top">
+            <span data-avatar="xl" data-online></span>
+            <span class="hand about-card__me"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M56 12C42 4 20 6 8 26"/><path d="M7 16 8 26l9-4"/></svg>that's me!</span>
+          </div>
+          <h3 class="about-card__name" data-bind="name">Muq</h3>
+          <p class="about-card__role"><span data-bind="role">AI Engineer</span> · <span data-bind="location">Remote-friendly</span></p>
+          <div class="about-card__bio" id="aboutBio"></div>
+          <p class="about-card__now"><span class="dot" aria-hidden="true"></span><span>Now: <span data-bind="now">Building</span></span></p>
+          <div class="about-card__links" id="aboutLinks"></div>
+        </aside>
+        <div class="about__main">
+          <div class="timeline-wrap" id="timelineWrap"><span class="timeline__fill" aria-hidden="true"></span><ol class="timeline" id="timeline"></ol></div>
+          <div class="toolbox" id="toolbox"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section class="contact container" id="contact" aria-labelledby="contactTitle">
+      <div class="contact__panel" data-nav="dark" data-reveal>
+        <div class="contact__orbs" aria-hidden="true"><i></i><i></i><i></i></div>
+        <p class="hand contact__note">psst… I reply fast</p>
+        <h2 class="contact__title" id="contactTitle">Let's build something your agents will <span class="grad-text">love</span>.</h2>
+        <p class="contact__lead">Open to AI engineering roles, internships and interesting collaborations.</p>
+        <div class="contact__actions" id="contactActions"></div>
+        <button class="contact__mail" type="button" data-copy-email><span data-bind="email">hello@example.com</span><i data-icon="copy"></i></button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer container">
+    <p>© <span id="year">2026</span> <span data-bind="name">Muq</span>. Designed &amp; built by hand.</p>
+    <div class="footer__right">
+      <button type="button" data-palette>Press <kbd>/</kbd> for commands</button>
+      <a href="#top">Back to top <i data-icon="arrow-up"></i></a>
+    </div>
+  </footer>
+
+  <!-- ============ OVERLAYS ============ -->
+  <dialog class="modal" id="modal" aria-labelledby="modalTitle">
+    <button class="icon-btn modal__close" type="button" data-close aria-label="Close"><i data-icon="x"></i></button>
+    <div class="modal__body" id="modalBody"></div>
+  </dialog>
+
+  <dialog class="palette" id="palette" aria-label="Command palette">
+    <div class="palette__input">
+      <span class="palette__slash" aria-hidden="true">/</span>
+      <input id="paletteInput" type="text" placeholder="Type a command or search…" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="true" aria-controls="paletteList" aria-autocomplete="list">
+    </div>
+    <ul class="palette__list" id="paletteList" role="listbox"></ul>
+    <div class="palette__foot"><span><kbd>↑</kbd><kbd>↓</kbd> navigate</span><span><kbd>↵</kbd> run</span><span><kbd>esc</kbd> close</span></div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
