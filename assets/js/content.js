@@ -21,7 +21,7 @@ window.SITE = {
     // {word|area} highlights a word in the headline in that area's colour.
     headline: 'I build {full-stack|fs} products and the {data|data} pipelines behind them, and run them in the {cloud|cloud}.',
     lead: 'This portfolio is a status page for the things I’ve built and still run. The checks are real: your browser is asking my services how they are, right now.',
-    status: 'Computer Engineering student at Chulalongkorn · open to internships',
+    status: 'Computer Engineering student at Chulalongkorn · open to internships, co-op and part-time roles',
     location: 'Bangkok, Thailand',
     timezone: 'Asia/Bangkok',
     tzLabel: 'UTC+7',
