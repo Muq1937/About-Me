@@ -1,394 +1,478 @@
 /* =====================================================================
-   SITE CONTENT: the only file you need to edit to update the portfolio.
+   SITE CONTENT: the one file to edit when something changes.
    ---------------------------------------------------------------------
-   Everything on the page renders from this object. Anything marked
-   "TODO" is placeholder content, so swap in your real details.
+   Every word, number and link on the page renders from window.SITE.
+   Lines marked TODO are placeholders or guesses waiting for you.
+   On the page, TODO items show a small dashed "TODO" tag so they are
+   easy to spot. Empty strings ('') hide a link or show a placeholder.
 
-   Images  → drop files in assets/img/ and reference them, e.g.
-             image: "assets/img/projects/pr-review.png"
-   Videos  → a YouTube link ("https://youtu.be/VIDEO_ID") or a file
-             in assets/video/ ("assets/video/pr-review.mp4")
-   Covers  → projects without an image get generated cover art:
-             kind:    "terminal" | "browser" | "chat" | "chart" | "doc" | "nodes" | "poster"
-             palette: "violet" | "blue" | "peach" | "pink" | "mint" | "teal" | "amber" | "lemon"
+   Live data: the overview console asks two public endpoints for fresh
+   numbers when the page loads (see `checks`). If a request fails, the
+   numbers written here are shown instead, so keep them roughly current.
    ===================================================================== */
 window.SITE = {
   profile: {
-    name: "Muq",                                   // TODO: your display name
-    handle: "Muq1937",                             // GitHub username
-    role: "AI Engineer",
-    status: "Open to work",
-    statusDetail: "AI Engineer & full-stack roles", // TODO
-    location: "Remote-friendly",                    // TODO: e.g. "Bangkok, Thailand"
-    avatar: "",                                     // TODO: e.g. "assets/img/avatar.jpg" (square). Empty = initials
-    email: "hello@example.com",                     // TODO
-    bio: [
-      "Hi, I'm Muq. I make AI agents genuinely useful: I build the Skills, Plugins and MCP servers that give coding agents new abilities, and the full-stack apps that put them in front of people.",
-      "I care about clear instructions, honest evals and interfaces that feel good to use.", // TODO
-    ],
-    now: "Building agent Skills & Plugins",         // TODO
+    name: 'Supanut Udompataikul',
+    short: 'Supanut',
+    initials: 'SU',
+    handle: 'Muq1937',
+    host: 'supanut.status',
+    role: 'Full-stack, data and cloud developer',
+    // {word|area} highlights a word in the headline in that area's colour.
+    headline: 'I build {full-stack|fs} products and the {data|data} pipelines behind them, and run them in the {cloud|cloud}.',
+    lead: 'This portfolio is a status page for the things I’ve built and still run. The checks are real: your browser is asking my services how they are, right now.',
+    status: 'Computer Engineering student at Chulalongkorn · open to internships',
+    location: 'Bangkok, Thailand',
+    timezone: 'Asia/Bangkok',
+    tzLabel: 'UTC+7',
+    email: 'muqkung@gmail.com',
     links: {
-      github: "https://github.com/Muq1937",
-      linkedin: "",                                 // TODO: full URL
-      resume: "",                                   // TODO: e.g. "assets/resume.pdf"
+      github: 'https://github.com/Muq1937',
+      linkedin: '',                // TODO: full LinkedIn URL
+      // The résumé is kept off this site on purpose (it has a phone number). It links here instead.
     },
   },
 
-  // Count-up tiles in the hero. TODO: use your real numbers.
-  heroStats: [
-    { value: 12, suffix: "+", label: "Projects" },
-    { value: 8, label: "Agent skills" },
-    { value: 3, label: "Plugins" },
-    { value: 2, suffix: "+", label: "Years building" },
+  // The three focus areas. Colours live in styles.css (--a-fs, --a-data, --a-cloud).
+  areas: [
+    { id: 'fs', label: 'Full-stack' },
+    { id: 'data', label: 'Data' },
+    { id: 'cloud', label: 'Cloud' },
   ],
 
-  // Scrolling tech strip under the showcase heading.
+  /* -------------------------------------------------------------------
+     LIVE CHECKS: run from the visitor's browser by the overview console.
+     Both endpoints are public and send Access-Control-Allow-Origin: *.
+     ------------------------------------------------------------------- */
+  checks: {
+    maklomthai: {
+      label: 'MaklomThai API',
+      path: 'GET /api/meta',
+      url: 'https://thaigotracker-backend.vercel.app/api/meta',
+      every: 30, // seconds between pings while the console is on screen
+    },
+    changelog: {
+      label: 'Thailand Changelog',
+      path: 'GET /entries.json',
+      url: 'https://muq1937.github.io/ThaiChangelog/entries.json',
+      // news-check.yml runs on cron "17 */2 * * *" (UTC)
+      cron: { minute: 17, everyHours: 2 },
+    },
+  },
+
+  // Shown when a live request fails. Snapshot taken 5 Nov 2026.
+  fallback: {
+    maklomthai: { totalMatches: 16108, totalPlayers: 1180, latestMatchDate: '2026-10-18', builtAt: '2026-11-05T05:09:47Z' },
+    changelog: {
+      "generated": "2026-11-04T23:46:13.275Z",
+      "count": 22,
+      "entries": [
+        {
+          "tag": "buff",
+          "date": "2026-11-05",
+          "time": "06:45",
+          "title": "Petrol fuel prices buffed: -0.70 baht per liter from 5 November",
+          "source": "Thai PBS",
+          "url": "https://www.thaipbs.or.th/news/content/572196"
+        },
+        {
+          "tag": "rebalance",
+          "date": "2026-11-04",
+          "time": "16:27",
+          "title": "Diesel fuel subsidy rebalanced: 3.49 baht per liter effective 4 Nov",
+          "source": "Matichon Online",
+          "url": "https://www.matichon.co.th/economy/news_5960325"
+        },
+        {
+          "tag": "rebalance",
+          "date": "2026-11-03",
+          "time": "19:02",
+          "title": "Yi Peng festival update: Chiang Mai cancels 108 flights",
+          "source": "Khaosod",
+          "url": "https://www.khaosod.co.th/around-thailand/news_10459072"
+        }
+      ]
+    },
+  },
+
+  // Count-up tiles under the hero. `live` names a value the checks refresh.
+  telemetry: [
+    { id: 'matches', value: 16108, label: 'match results tracked', source: 'MaklomThai', live: 'mt.totalMatches' },
+    { id: 'players', value: 1180, label: 'Go players ranked', source: 'MaklomThai', live: 'mt.totalPlayers' },
+    { id: 'loop', value: 576, of: 582, label: 'players in one loop of wins', source: 'Proven longest' },
+    { id: 'runs', value: 12, label: 'pipeline runs a day', source: 'Thailand Changelog' },
+  ],
+
+  /* -------------------------------------------------------------------
+     SERVICES: the projects. status: 'operational' | 'archived'
+     Screenshots use {theme}, swapped for 'light' or 'dark' to match the page.
+     ------------------------------------------------------------------- */
+  services: [
+    {
+      id: 'maklomthai',
+      name: 'MaklomThai',
+      native: 'หมากล้อมไทย',
+      kicker: 'Thai Go rankings',
+      status: 'operational',
+      host: 'maklomthai.vercel.app',
+      platform: 'Vercel',
+      since: 'Feb 2026',
+      role: 'Solo developer. Friends helped collect some of the data.',
+      areas: ['fs', 'data', 'cloud'],
+      tagline: 'Rankings, match history and tournament results for every dan-level Go (หมากล้อม) player in Thailand.',
+      summary: [
+        'MaklomThai turns the Thai dan registry, a stack of yearly spreadsheets going back to 2020, into a fast public site: rankings by GAT points, player profiles, head-to-head records and fun facts, in Thai and English.',
+        'Behind it is an Express and MongoDB API on Vercel. Public reads never aggregate on request. After every write, the backend rebuilds precomputed read models and tells Next.js exactly which pages to refresh.',
+        'I’m a 3-dan player myself and play in the tournaments it ranks, so its users are my own community.',
+      ],
+      built: [
+        'A Next.js 15 frontend (App Router, React 18, TypeScript, Tailwind, zustand) with a bilingual Thai/English UI and a light/dark design system.',
+        'An Express and MongoDB API on Vercel serverless, with integration tests on an in-memory MongoDB.',
+        'Static pages that stay current: each write rebuilds hashed, precomputed read models and fires a webhook that refreshes only the pages that changed. An atomic counter blocks stale overwrites.',
+        'A human-in-the-loop data pipeline: a nightly cron turns the official rating sheet into a reviewable proposal, with a safety brake and revert, that admins approve through a Discord bot.',
+        'A nightly GitHub Action that finds the longest loop of wins with OR-Tools CP-SAT and stores it through the API.',
+      ],
+      stack: ['Next.js 15', 'React 18', 'TypeScript', 'Tailwind CSS', 'zustand', 'Express', 'MongoDB', 'Mongoose', 'Vercel', 'Vercel cron', 'Discord bot', 'Apps Script', 'GitHub Actions', 'OR-Tools', 'Neo4j'],
+      metrics: [
+        { value: 16108, label: 'match results', live: 'mt.totalMatches' },
+        { value: 1180, label: 'players ranked', live: 'mt.totalPlayers' },
+        { value: 576, label: 'player loop of wins' },
+      ],
+      links: { live: 'https://maklomthai.vercel.app', repo: '', repoNote: 'Code is private' },
+      shots: [
+        { src: 'assets/img/projects/maklomthai-rankings-{theme}.webp', alt: 'MaklomThai rankings page: a podium of the top three players above the full standings', caption: 'Rankings' },
+        { src: 'assets/img/projects/maklomthai-funfacts-{theme}.webp', alt: 'MaklomThai fun facts page: 1,180 players, 16,108 matches and 670 active players', caption: 'Fun facts' },
+      ],
+      pipelines: ['maklomthai', 'winloop'],
+    },
+    {
+      id: 'thai-changelog',
+      name: 'Thailand Changelog',
+      kicker: 'Scheduled news pipeline',
+      status: 'operational',
+      host: 'muq1937.github.io/ThaiChangelog',
+      platform: 'GitHub Actions + Pages',
+      since: 'Oct 2026',
+      role: 'Solo project',
+      areas: ['data', 'cloud'],
+      tagline: 'Real news from Thailand, rewritten as video-game patch notes in Thai and English. Checked every two hours.',
+      summary: [
+        'A scheduled pipeline that reads Thai news, keeps only the stories people are really talking about, and publishes them as bilingual patch notes: BUFF, NERF, REBALANCE, EVENT and more.',
+        'It runs entirely on GitHub. Actions does the work twelve times a day, the Actions cache remembers what was already judged, and Pages serves the site and two RSS feeds.',
+      ],
+      built: [
+        'An ETL job in Node.js: 10 RSS feeds from five publishers plus Google Trends for Thailand, filtered by age, a seen-links cache and a Thai and English keyword blocklist before any model call.',
+        'Scoring with Gemini in batches of 60 headlines for public attention (1–10). Every story scoring 8 or more is written up in English and Thai.',
+        'Safety rules enforced in code, not only in the prompt: each reply is validated for score, tab, tags, lengths, language and the blocklist again.',
+        'Free-tier quota engineering: a run at :17 every two hours, usually one request each, inside the limit of 20 requests per model per day, with a fallback list of models.',
+        'A review mode that opens a pull request for a person to merge, or an auto mode that commits straight to main. A build step renders the site, entries.json and both feeds.',
+      ],
+      stack: ['Node.js 22', 'JavaScript', 'GitHub Actions', 'Actions cache', 'GitHub Pages', 'Gemini API', 'RSS', 'Google Trends'],
+      metrics: [
+        { value: 12, label: 'runs a day' },
+        { value: 22, label: 'patch notes so far', live: 'tc.count' },
+        { value: 2, label: 'languages' },
+      ],
+      links: {
+        live: 'https://muq1937.github.io/ThaiChangelog/',
+        repo: 'https://github.com/Muq1937/ThaiChangelog',
+        feeds: [
+          { label: 'RSS (English)', url: 'https://muq1937.github.io/ThaiChangelog/feed.xml' },
+          { label: 'RSS (Thai)', url: 'https://muq1937.github.io/ThaiChangelog/feed-th.xml' },
+        ],
+      },
+      shots: [
+        { src: 'assets/img/projects/thai-changelog-{theme}.webp', alt: 'Thailand Changelog: the latest day of news written as patch notes, with BUFF and NERF filters', caption: 'Changelog' },
+        { src: 'assets/img/projects/thai-changelog-feed-{theme}.webp', alt: 'Thailand Changelog: patch notes grouped by date, each linking to its source', caption: 'Feed' },
+      ],
+      pipelines: ['thai-changelog'],
+    },
+    {
+      id: 'urban-issues',
+      name: 'Urban Issue Forecasting',
+      kicker: 'Team course project',
+      status: 'archived',
+      host: 'Streamlit dashboard',
+      platform: 'Python',
+      since: 'Dec 2025',
+      role: 'Team of four. I built the dashboard’s machine-learning views.', // TODO(confirm): your role
+      course: '2110403 Data Science and Data Engineering, Chulalongkorn University (CEDT)',
+      areas: ['data'],
+      tagline: 'Analysing, forecasting and mapping Bangkok’s urban complaints from Traffy Fondue, alongside MEA power-outage data.',
+      summary: [
+        'Team M150-Lover’s project for 2110403 Data Science and Data Engineering: an end-to-end pipeline that collects Bangkok complaint data, cleans it with Spark, forecasts complaint volumes and flags unusual patterns.',
+        'My part was the Streamlit dashboard’s machine-learning views, which bring the forecast and the anomaly detection into the app so people can explore them.', // TODO(confirm)
+      ],
+      built: [ // TODO(confirm): adjust to match what you did
+        'Wired the RandomForest forecast into the dashboard, with past predictions shown against the actual complaint counts.',
+        'Built the anomaly views on top of the Isolation Forest model.',
+        'Reworked the forecasting model script and added a new visualisation tab.',
+      ],
+      stack: ['Python', 'pandas', 'scikit-learn', 'Streamlit', 'Plotly', 'Folium', 'Apache Spark', 'Jupyter'],
+      metrics: [
+        { value: 780, suffix: 'k+', label: 'records in the dashboard' },
+        { value: 60, prefix: '7–', suffix: ' days', label: 'forecast horizon' },
+        { value: 4, label: 'people on the team' },
+      ],
+      links: { live: '', repo: 'https://github.com/ParinthornThammarux/2110403-DSDE-M150-Lover', repoLabel: 'Team repo' },
+      cover: 'forecast', // no live site, so the card shows generated art
+      pipelines: ['urban-issues'],
+      confirm: ['role', 'built'], // fields shown with a TODO tag until you confirm them
+    },
+  ],
+
+  /* -------------------------------------------------------------------
+     PIPELINES: one linear flow per tab.
+     kind sets the colour: trigger, source, filter, model, check, git,
+     deploy, api, store, job, app, human, transform.
+     drop: share of the animated dots that stop at this step (illustration only).
+     paint: dots change to this colour after the step ('ok', 'data', 'fs', 'cloud').
+     live: a fresh value shown in the inspector ('nextRun', 'feed', 'mtPing', 'mtBuilt').
+     mine: true marks your part of a team project.
+     area: the colour of the pipeline's tab ('fs', 'data' or 'cloud').
+     ------------------------------------------------------------------- */
+  pipelines: [
+    {
+      id: 'thai-changelog',
+      service: 'thai-changelog',
+      area: 'cloud',
+      title: 'Thailand Changelog',
+      file: '.github/workflows/news-check.yml',
+      schedule: 'every 2 hours',
+      summary: 'Twelve runs a day. Most publish nothing, which is the point: only stories with real public attention get through.',
+      nodes: [
+        { label: 'Schedule', sub: 'every 2h at :17', kind: 'trigger', icon: 'clock', live: 'nextRun',
+          text: 'GitHub Actions starts a run every two hours, at 17 minutes past because GitHub delays runs scheduled on the hour. Twelve runs a day keep within Gemini’s free tier of 20 requests per model per day, with room for retries.',
+          code: 'on:\n  schedule:\n    - cron: "17 */2 * * *"' },
+        { label: 'Ingest', sub: '10 feeds + Trends', kind: 'source', icon: 'rss',
+          text: 'Reads 10 RSS feeds from five publishers (Thaiger, Khaosod English, Khaosod, Matichon and Sanook) plus Google Trends for Thailand: what people are searching for right now, with linked articles.',
+          code: 'FEEDS        // 10 feeds, 5 publishers\nTRENDS_URL   // trending/rss?geo=TH' },
+        { label: 'Filter', sub: 'seen · 36h · blocklist', kind: 'filter', icon: 'filter', drop: 0.45,
+          text: 'Drops links already judged (remembered for 21 days in the Actions cache, not in git), stories older than 36 hours, and every hard-no topic on a Thai and English keyword blocklist, all before the model sees anything.',
+          code: 'maxAgeHours: 36,\nseenDays: 21,' },
+        { label: 'Score', sub: 'Gemini · batches of 60', kind: 'model', icon: 'gauge', drop: 0.8, paint: 'ok',
+          text: 'New headlines go to Gemini in batches of 60, with trending searches and nearby headlines as context. It scores public attention from 1 to 10: is it trending, widely covered, the kind of thing people forward?',
+          code: 'batchSize: 60,\ncontextHours: 48,' },
+        { label: 'Write', sub: 'EN + TH patch notes', kind: 'model', icon: 'pen',
+          text: 'Every story scoring 8 or more becomes a patch note in English and Thai, with a tab and a tag such as BUFF, NERF or REBALANCE. There’s no cap.',
+          code: 'minAttention: 8,' },
+        { label: 'Validate', sub: 'rules in code', kind: 'check', icon: 'shield',
+          text: 'Code checks every reply: the score, tab, tags, lengths and language, and the blocklist again. Each story is saved as its own JSON file.',
+          code: 'data/entries/2026-11-05-0645-1.json' },
+        { label: 'Publish', sub: 'review PR or commit', kind: 'git', icon: 'git',
+          text: 'In review mode the run opens a pull request and a person merges it. In auto mode it commits straight to main.',
+          code: 'PUBLISH_MODE=review   # or auto' },
+        { label: 'Deploy', sub: 'site · JSON · RSS', kind: 'deploy', icon: 'globe', live: 'feed',
+          text: 'build.mjs renders the static site, entries.json and the English and Thai RSS feeds, then deploy.yml publishes them to GitHub Pages.',
+          code: 'site/index.html\nentries.json\nfeed.xml  feed-th.xml' },
+      ],
+    },
+    {
+      id: 'maklomthai',
+      service: 'maklomthai',
+      area: 'fs',
+      title: 'MaklomThai',
+      file: 'Backend/src · MaklomThai/app',
+      schedule: 'nightly + on every write',
+      summary: 'Rating changes wait for a person to approve them, and each write does its heavy lifting once, so every read stays fast.',
+      nodes: [
+        { label: 'Rating sheet', sub: 'official GAT sheet', kind: 'source', icon: 'sheet',
+          text: 'The official rating sheet records GAT points, one workbook per year since 2020. An Apps Script keeps players’ names, dan levels and genders in step.',
+          code: 'sheets/  2020 … 2026\napps-script/sync_players.gs' },
+        { label: 'Nightly plan', sub: 'cron → proposal', kind: 'trigger', icon: 'clock',
+          text: 'Every night a Vercel cron reads the sheet and plans the changes as a proposal. Nothing reaches the site until someone approves it, and unapproved proposals expire after a week.',
+          code: 'GatProposal { ops, summary }' },
+        { label: 'Discord review', sub: 'approve · reject · revert', kind: 'human', icon: 'check',
+          text: 'Each proposal is posted to Discord with Approve, Reject and Revert buttons. Changes over a safety brake need a second confirmation, every button press is signature-checked, and an 8 pm reminder chases proposals that wait too long.',
+          code: 'POST /api/discord/interactions\n// Ed25519-signed, answered within 3 s' },
+        { label: 'Express API', sub: 'Vercel serverless', kind: 'api', icon: 'server', live: 'mtPing',
+          text: 'An Express and Mongoose API, deployed on Vercel as a single function, with integration tests on an in-memory MongoDB. Writes need an API key and public reads are open.',
+          code: 'api/index.ts → src/app.ts' },
+        { label: 'MongoDB', sub: 'players · matches · Elo', kind: 'store', icon: 'database',
+          text: 'Players, matches and tournaments live in MongoDB through Mongoose, with Elo ratings alongside the official GAT points.',
+          code: 'src/models/' },
+        { label: 'Snapshots', sub: 'precomputed reads', kind: 'job', icon: 'layers', live: 'mtBuilt',
+          text: 'Public reads never aggregate on request. After every write the backend rebuilds every read model in one pass. Each document carries a hash, so only what changed is written, and an atomic counter stops a slow rebuild from overwriting a newer one.',
+          code: 'snapshots: players · player:<id>\n           funfact · winloop · meta' },
+        { label: 'Revalidate', sub: 'webhook → changed pages', kind: 'app', icon: 'window',
+          text: 'Changed snapshot keys fire a webhook, and Next.js 15 refreshes only the pages behind them. Everything else stays prerendered.',
+          code: "revalidateTag('player:<id>')" },
+        { label: 'Vercel CDN', sub: 'to every visitor', kind: 'deploy', icon: 'globe',
+          text: 'Served from Vercel’s edge network, with Vercel Analytics.',
+          code: 'maklomthai.vercel.app' },
+      ],
+    },
+    {
+      id: 'winloop',
+      service: 'maklomthai',
+      area: 'data',
+      title: 'Win-loop solver',
+      file: '.github/workflows/win-loop.yml',
+      schedule: 'nightly',
+      summary: 'An NP-hard question, answered and proven every night.',
+      nodes: [
+        { label: 'Nightly', sub: 'GitHub Action', kind: 'trigger', icon: 'clock',
+          text: 'A GitHub Action runs the solver every night on the backend’s main branch.',
+          code: '.github/workflows/win-loop.yml' },
+        { label: 'Read', sub: 'public API only', kind: 'source', icon: 'download',
+          text: 'It reads every match and player through the public API, so it never touches the database directly.',
+          code: 'GET /api/matches\nGET /api/players' },
+        { label: 'Graph', sub: 'who beat whom', kind: 'transform', icon: 'graph', drop: 0.13,
+          text: 'Every winner→loser pair becomes an arrow. A loop can only use players who can all reach each other through wins (a strongly connected component), so the search keeps the largest one: 582 players. The same graph loads into Neo4j in Docker for exploring with Cypher.',
+          code: '(:Player)-[:BEAT]->(:Player)' },
+        { label: 'CP-SAT', sub: 'OR-Tools solver', kind: 'model', icon: 'cpu', paint: 'data',
+          text: 'Longest cycle is NP-hard, so plain graph queries can’t find it. OR-Tools CP-SAT makes each player optional and requires one arrow in, one arrow out and a single circuit. It takes about two seconds.',
+          code: 'model.AddCircuit(arcs)' },
+        { label: 'Prove', sub: 'no longer loop', kind: 'check', icon: 'shield',
+          text: '“Proven” means the solver showed that no longer loop exists: its upper bound equals the loop it found.',
+          code: 'proven: true\nbound: 576' },
+        { label: 'Store', sub: 'PUT only if better', kind: 'api', icon: 'upload',
+          text: 'The loop is saved with PUT /api/funfact/loop only when the stored one is broken or a longer one exists, so the page doesn’t reshuffle for nothing. Every rebuild re-checks it against the current matches.',
+          code: 'PUT /api/funfact/loop' },
+      ],
+    },
+    {
+      id: 'urban-issues',
+      service: 'urban-issues',
+      area: 'data',
+      title: 'Urban issues',
+      file: '2110403-DSDE-M150-Lover',
+      schedule: 'batch',
+      summary: 'From scraped complaints to a forecasting dashboard. The highlighted steps are my part of the team’s work.',
+      nodes: [
+        { label: 'Collect', sub: 'Traffy Fondue · MEA', kind: 'source', icon: 'download',
+          text: 'Complaint records from Bangkok’s Traffy Fondue platform, plus power-outage notices scraped from MEA with a parallel scraper.',
+          code: 'ticket_id, type, coords, district,\ntimestamp, state, …' },
+        { label: 'Clean', sub: 'Spark + pandas', kind: 'filter', icon: 'filter', drop: 0.25,
+          text: 'Cleaning, merging and deduplicating with Apache Spark and pandas notebooks.',
+          code: 'clean_data_traffy.ipynb' },
+        { label: 'Features', sub: 'time + place', kind: 'transform', icon: 'layers',
+          text: 'Time features (hour, day of week, month) and location features for each complaint.',
+          code: 'hour · day_of_week · month · district' },
+        { label: 'Forecast', sub: 'RandomForest', kind: 'model', icon: 'chart', mine: true, paint: 'data',
+          text: 'A RandomForest model forecasts daily complaint volumes from a 30-day lookback. The dashboard shows 7 to 60 days ahead with a confidence interval.',
+          code: 'ComplaintForecaster(\n  lookback_days=30,\n  forecast_horizon=7)' },
+        { label: 'Anomalies', sub: 'Isolation Forest', kind: 'model', icon: 'alert', mine: true,
+          text: 'An Isolation Forest flags complaints with unusual patterns and scores how unusual each one is.',
+          code: 'IsolationForest(contamination=0.05)' },
+        { label: 'Dashboard', sub: 'Streamlit', kind: 'app', icon: 'window', mine: true,
+          text: 'A Streamlit dashboard with Plotly charts and Folium maps: heat maps, district breakdowns, the forecast against actual counts, and the anomalies.',
+          code: 'streamlit run visualization/main_dashboard.py' },
+      ],
+    },
+  ],
+
+  /* -------------------------------------------------------------------
+     ANALYSIS: the longest loop of wins in MaklomThai's match records.
+     `loop` is a snapshot of GET /api/funfact/loop with names left out:
+     one character per player in loop order. dans = dan level;
+     wins / losses = head-to-head against the next player (base 36);
+     years = year of the last win, minus 2020.
+     ------------------------------------------------------------------- */
+  analysis: {
+    title: 'One loop of 576 wins',
+    lead: 'A beat B, B beat C, and so on, until the last player beat A. How long can that loop get across every Go match recorded in Thailand?',
+    steps: [
+      { k: 'Graph it', t: 'Every MaklomThai match becomes an arrow from winner to loser: 16,108 matches between the 670 players who have played.' },
+      { k: 'Narrow it', t: 'A loop can only use players who can all reach each other through wins, a strongly connected component. The largest holds 582 players.' },
+      { k: 'Solve it', t: 'Longest cycle is NP-hard, so plain graph queries can’t find it. OR-Tools CP-SAT picks players so that each has one arrow in and one out, in a single circuit.' },
+      // TODO(confirm): the reason six are left out comes from the 24 Oct run's notes
+      { k: 'Prove it', t: 'The solver found 576 and proved that no longer loop exists. Why not all 582? Some players only ever beat the same few opponents, and each player in a loop is beaten by exactly one other.' },
+    ],
+    note: 'Snapshot of the live loop from the MaklomThai API, solved 3 Nov 2026. One tick per player, in loop order. Longer, darker ticks are higher dan.',
+    loop: {
+      length: 576,
+      proven: true,
+      bound: 576,
+      component: 582,
+      matches: 16108,
+      active: 670,
+      solvedAt: "2026-11-03",
+      dans: "211123222224441112112111424444444454442133233343343511333442212141211132444545655444114424321112111111111221111111121212214144444411111111112211121323231411111111131111111111111111112113221122211111111111111121112441111123112112132123345431221111134414461111111222123332333345411111211131313123445545321111231155554455111211144232111213311213222342323254142111111131455442334433331444645411411111111111314211111121111112211411111111111112111111111121215322244422323343211111211221123445445124421424441111122554543433333432114114444421111122332111111321221342241112211311114111",
+      wins: "111111111111111111111111111111111111121111111111111111111111111121111111111111211111111122211111111111111211121111111111111111111111111111111111111111111111111111111111231111111111111111111221111111111111111111111111111111111111111111231111111111111111111111112211111111111211111121211111111111111121111211121112211111111111111111111111111111111111111122131111111111111211111111111111111111112111111111111211111111112112111111111111111111111111111111111111121111111111111111111112111111111111111112111111111111111111111221111111211112111111111111111111111111111211111111111111",
+      losses: "00000000000000000000000100100000000000000010200010001000000000001100001000412d010000010000000000000000000000000000000001010000010000000000000000010000000000100000000000010000000100000010000300000000000000000100000000000000000000000000210000000001110001400000000000002000000001000011000010000002000000000100000030010000000000000100000000000000000100000200100000000000000000000000000000010000000000000000000000000000000000000000000000001100000000000110000000010000010000000000100000200100000020000000100000200000000000000200100000000000000002000000000000000101000000000000000001",
+      years: "655565000006666654336665664333002255222342132122222000002300363334444422223532422220003336652224445564666566666666344402222222233435545555555666666623533224111033566666666666666663333224544556666666666666665554002222223452245555522660523333221112223302000222602303335622660205222440002332321002426622233222330160000000001220034433556563225532332222333350033566655633644244333331311330201111001003433344503266656502246565552666665566666666656656666666335554356235566245555566655666660253301112003323022433433533623356245320000004442444444365555554066666110036323442333333335666",
+    },
+  },
+
+  /* ------------------------------------------------------------------- */
+  certifications: [
+    {
+      id: 'hccda',
+      issuer: 'Huawei Cloud',
+      program: 'Developer Certification',
+      name: 'HCCDA – Tech Essentials',
+      level: 'Certified Developer Associate',
+      validUntil: '2029-09-22',
+      issued: '2026-09-22',
+      number: 'HWENDCTEDA00264658004', // shown as the credential ID; set to '' to hide it
+      image: 'assets/img/certs/huawei-hccda.webp',
+      thumb: 'assets/img/certs/huawei-hccda-thumb.webp',
+    },
+  ],
+
+  /* -------------------------------------------------------------------
+     STACK: tools grouped by area. `used` lists service ids ('site' = this
+     page, 'hccda' = the certificate).
+     ------------------------------------------------------------------- */
   stack: [
-    "Python", "TypeScript", "Claude API", "Agent Skills", "Model Context Protocol", "React",
-    "Next.js", "Node.js", "FastAPI", "PostgreSQL", "Docker", "GitHub Actions",
-    "PyTorch", "RAG", "Evals", "Tailwind CSS", "Bash", "Vercel",
-  ],
-
-  /* -------------------------------------------------------------------
-     SHOWCASE: one "hat" per category. As visitors scroll, the profile
-     frame swaps to show that category's stats, tags and projects.
-     ------------------------------------------------------------------- */
-  categories: [
     {
-      id: "skills",
-      label: "Agent Skills",
-      poster: "AGENT SKILLS",
-      colors: { from: "#1C1450", to: "#6C4DFF", ink: "#DCD3FF" }, palette: "violet",
-      bio: "I write Skills that teach coding agents new, repeatable abilities: tight triggers, clear steps and evals that prove they work.",
-      stats: [["8", "Skills"], ["1.2k", "Runs"], ["94%", "Eval pass"], ["4", "Teams"]], // TODO
-      tags: ["SKILL.md", "Prompt design", "Trigger evals"],
-      viewAll: "#lab",
-      highlights: [
-        { title: "Demo: /pr-review on a real pull request", type: "video", meta: "Video · 2:31", project: "pr-review" },
-        { title: "How I write skill descriptions that actually trigger", type: "article", meta: "Write-up · 6 min read" },
-        { title: "Trigger eval results, before vs. after", type: "report", meta: "Report · 94% pass", project: "eval-harness" },
+      area: 'fs', title: 'Full-stack',
+      items: [
+        { name: 'TypeScript', used: ['maklomthai'] },
+        { name: 'React', v: '18', used: ['maklomthai'] },
+        { name: 'Next.js', v: '15', used: ['maklomthai'] },
+        { name: 'Tailwind CSS', v: '4', used: ['maklomthai'] },
+        { name: 'zustand', used: ['maklomthai'] },
+        { name: 'Node.js', v: '22', used: ['maklomthai', 'thai-changelog'] },
+        { name: 'Express', v: '4', used: ['maklomthai'] },
+        { name: 'MongoDB · Mongoose', v: '8', used: ['maklomthai'] },
+        { name: 'HTML, CSS, JavaScript', used: ['thai-changelog', 'site'] },
+        { name: 'SQL · Java · C/C++' },
       ],
-      stack: [["Claude Code", "daily driver"], ["Markdown + YAML", "skill format"], ["Python", "helper scripts"], ["Bash", "tooling"], ["GitHub CLI", "PR automation"], ["Evals", "trigger tests"]],
-      about: "A skill is just a folder: a SKILL.md with instructions, plus scripts and references the agent loads on demand. The hard part is the description, because it decides when the skill fires. I iterate on it with trigger tests until it fires when it should and stays quiet when it shouldn't.",
     },
     {
-      id: "plugins",
-      label: "Plugins & MCP",
-      poster: "PLUGINS & MCP",
-      colors: { from: "#4A0E1E", to: "#FF4F6E", ink: "#FFD6DE" }, palette: "pink",
-      bio: "I package skills, slash commands, hooks and MCP servers into plugins that a whole team can install in one line.",
-      stats: [["3", "Plugins"], ["9", "MCP tools"], ["120", "Installs"], ["0", "Incidents"]], // TODO
-      tags: ["MCP servers", "Hooks", "Slash commands"],
-      viewAll: "#lab",
-      highlights: [
-        { title: "Demo: installing team-toolkit in 10 seconds", type: "video", meta: "Video · 1:48", project: "team-toolkit" },
-        { title: "Designing safe, read-only MCP tools", type: "article", meta: "Write-up · 8 min read" },
-        { title: "db-explorer MCP server", type: "repo", meta: "Repo · Python", project: "db-explorer" },
+      area: 'data', title: 'Data',
+      items: [
+        { name: 'Python', used: ['urban-issues', 'maklomthai'] },
+        { name: 'pandas', used: ['urban-issues'] },
+        { name: 'scikit-learn', used: ['urban-issues'] },
+        { name: 'Streamlit · Plotly · Folium', used: ['urban-issues'] },
+        { name: 'YOLOv8 · EfficientNet · OpenCV', used: ['CCTV water-level research'] },
+        { name: 'PySpark · Databricks' },
+        { name: 'Neo4j · Cypher', v: '5', used: ['maklomthai'] },
+        { name: 'OR-Tools CP-SAT', used: ['maklomthai'] },
+        { name: 'RSS ingestion (ETL)', used: ['thai-changelog'] },
+        { name: 'Google Sheets · Apps Script', used: ['maklomthai', 'EGG Digital internship'] },
+        { name: 'Gemini API', used: ['thai-changelog'] },
       ],
-      stack: [["MCP", "tool servers"], ["TypeScript", "plugins"], ["Python", "FastMCP"], ["JSON Schema", "tool inputs"], ["Hooks", "guardrails"], ["SQL", "read-only access"]],
-      about: "Plugins bundle everything a team needs (skills, commands, subagents, hooks and MCP servers) behind a single install. I design MCP tools to be narrow and safe by default: read-only first, clear schemas and errors an agent can recover from.",
     },
     {
-      id: "apps",
-      label: "Full-stack Apps",
-      poster: "FULL STACK",
-      colors: { from: "#04302C", to: "#12B39E", ink: "#C9FFF4" }, palette: "teal",
-      bio: "I ship AI-powered web apps end to end: interface, APIs, data and deploys.",
-      stats: [["6", "Apps"], ["3", "Live"], ["99.9%", "Uptime"], ["<1s", "P95 load"]], // TODO
-      tags: ["React", "FastAPI", "PostgreSQL"],
-      viewAll: "https://github.com/Muq1937",
-      highlights: [
-        { title: "Walkthrough: Study Buddy from notes to quiz", type: "video", meta: "Video · 3:05", project: "study-buddy" },
-        { title: "This portfolio: hand-built, no framework", type: "repo", meta: "Repo · HTML/CSS/JS", project: "portfolio" },
-        { title: "Shipping a FastAPI + React app on a student budget", type: "article", meta: "Write-up · 7 min read" },
+      area: 'cloud', title: 'Cloud & DevOps',
+      items: [
+        { name: 'Vercel', note: 'serverless · cron · ISR · analytics', used: ['maklomthai'] },
+        { name: 'GitHub Actions', note: 'cron · cache · PRs', used: ['thai-changelog', 'maklomthai'] },
+        { name: 'GitHub Pages', used: ['thai-changelog', 'site'] },
+        { name: 'Docker', used: ['maklomthai'] },
+        { name: 'Huawei Cloud', note: 'HCCDA certified', used: ['hccda'] },
+        { name: 'Git · pull-request review', used: ['maklomthai', 'thai-changelog', 'urban-issues'] },
       ],
-      stack: [["React", "UI"], ["Next.js", "web apps"], ["FastAPI", "APIs"], ["PostgreSQL", "data"], ["Docker", "packaging"], ["GitHub Actions", "CI/CD"]],
-      about: "I like owning a feature from the first sketch to the production deploy. Most of my apps put an AI capability behind a calm, fast interface, and do the boring parts properly: auth, tests, monitoring and docs.",
-    },
-    {
-      id: "ml",
-      label: "ML & Evals",
-      poster: "EVALS & ML",
-      colors: { from: "#3B2300", to: "#F29A0B", ink: "#FFE9BE" }, palette: "amber",
-      bio: "I measure models and prompts before I trust them, with evals, benchmarks and dashboards that make every change a measured bet.",
-      stats: [["40+", "Eval suites"], ["5", "Models"], ["+38%", "Avg. lift"], ["92%", "Best F1"]], // TODO
-      tags: ["Evals", "RAG", "PyTorch"],
-      viewAll: "https://github.com/Muq1937",
-      highlights: [
-        { title: "Eval harness: catching prompt regressions in CI", type: "report", meta: "Report · 40 suites", project: "eval-harness" },
-        { title: "RAG Q&A with citations, live demo", type: "video", meta: "Video · 2:12", project: "rag-qa" },
-        { title: "What I learned fine-tuning a small classifier", type: "article", meta: "Write-up · 9 min read", project: "review-classifier" },
-      ],
-      stack: [["PyTorch", "training"], ["scikit-learn", "baselines"], ["pandas", "analysis"], ["Embeddings", "retrieval"], ["Jupyter", "experiments"], ["Matplotlib", "reporting"]],
-      about: "Good AI products start with good measurement. I build small, sharp eval suites, track them over time and wire them into CI so a prompt tweak can't quietly break something that used to work.",
     },
   ],
 
   /* -------------------------------------------------------------------
-     PROJECTS: shown in the showcase grid and opened in a detail modal.
-     TODO: replace these examples with your real projects.
+     CHANGELOG: the timeline, newest first.
+     tag: shipped | data | research | cert | course | edu | work
+     todo: a note shown with a TODO tag until you fill the entry in.
      ------------------------------------------------------------------- */
-  projects: [
-    {
-      id: "pr-review", title: "PR Review Skill", category: "skills", year: "2026",
-      summary: "A skill that reviews pull requests like a senior engineer: risks first, then tests, then style.",
-      details: ["Reads the full files around every hunk, not just the diff", "Runs the tests that cover changed code before commenting", "Posts one summary plus inline comments tied to file and line"],
-      stack: ["Agent Skills", "GitHub CLI", "Bash"],
-      links: { repo: "", live: "", video: "" },
-      image: "", cover: { kind: "terminal", palette: "violet" }, shape: "tall",
-    },
-    {
-      id: "release-notes", title: "Release Notes Skill", category: "skills", year: "2026",
-      summary: "Turns merged PRs into clean, user-facing release notes and a changelog entry.",
-      details: ["Groups changes into features, fixes and breaking changes", "Links every line back to its PR", "Shows the diff before anything is committed"],
-      stack: ["Agent Skills", "Git", "Markdown"],
-      links: { repo: "", live: "", video: "" },
-      image: "", cover: { kind: "doc", palette: "blue" }, shape: "square",
-    },
-    {
-      id: "test-writer", title: "Test Writer Agent", category: "skills", year: "2025",
-      summary: "A subagent that writes focused unit tests and keeps iterating until they pass.",
-      details: ["Targets uncovered branches from the coverage report", "Never edits source files, only tests", "Explains each test in one line"],
-      stack: ["Subagents", "pytest", "Jest"],
-      links: { repo: "", live: "", video: "" },
-      image: "", cover: { kind: "chart", palette: "mint" }, shape: "wide",
-    },
-    {
-      id: "team-toolkit", title: "Team Toolkit Plugin", category: "plugins", year: "2026",
-      summary: "One install that bundles a team's skills, slash commands, subagents and hooks.",
-      details: ["2 skills, 1 command, 1 subagent and a format-on-save hook", "Versioned and distributed through a plugin marketplace", "Onboards a new teammate's agent in seconds"],
-      stack: ["Plugins", "Hooks", "Slash commands"],
-      links: { repo: "", live: "", video: "" },
-      image: "", cover: { kind: "nodes", palette: "peach" }, shape: "tall",
-    },
-    {
-      id: "db-explorer", title: "DB Explorer MCP", category: "plugins", year: "2026",
-      summary: "An MCP server that lets agents safely explore and query a Postgres database.",
-      details: ["Read-only by design: only SELECT, capped rows", "Schema discovery tools so the agent writes correct SQL", "Errors phrased so the agent can self-correct"],
-      stack: ["MCP", "Python", "PostgreSQL"],
-      links: { repo: "", live: "", video: "" },
-      image: "", cover: { kind: "terminal", palette: "pink" }, shape: "square",
-    },
-    {
-      id: "docs-search", title: "Docs Search MCP", category: "plugins", year: "2025",
-      summary: "Gives agents semantic search over internal docs, with sources attached.",
-      details: ["Chunked, embedded and refreshed nightly", "Returns passages with links, never raw dumps", "Works in any MCP-capable client"],
-      stack: ["MCP", "Embeddings", "TypeScript"],
-      links: { repo: "", live: "", video: "" },
-      image: "", cover: { kind: "doc", palette: "amber" }, shape: "wide",
-    },
-    {
-      id: "study-buddy", title: "Study Buddy", category: "apps", year: "2025",
-      summary: "A web app that turns lecture notes into quizzes and flashcards, with an AI tutor on call.",
-      details: ["Upload notes, get a quiz in under ten seconds", "Spaced repetition schedule for flashcards", "Tutor answers cite the exact page of your notes"],
-      stack: ["React", "FastAPI", "PostgreSQL"],
-      links: { repo: "", live: "", video: "" },
-      image: "", cover: { kind: "chat", palette: "mint" }, shape: "tall",
-    },
-    {
-      id: "portfolio", title: "This Portfolio", category: "apps", year: "2026",
-      summary: "Hand-built, animated and data-driven, with no framework and no build step. Hosted on GitHub Pages.",
-      details: ["All content lives in one file (content.js)", "Scroll-driven showcase, live terminal demos, command palette (press /)", "Respects reduced-motion and dark-mode preferences"],
-      stack: ["HTML", "CSS", "JavaScript"],
-      links: { repo: "https://github.com/Muq1937/About-Me", live: "", video: "" },
-      image: "", cover: { kind: "browser", palette: "teal" }, shape: "square",
-    },
-    {
-      id: "ops-dashboard", title: "Ops Dashboard", category: "apps", year: "2025",
-      summary: "A real-time dashboard for deploys, errors and cloud costs in one calm screen.",
-      details: ["Live updates over WebSockets", "Cost anomalies flagged automatically", "Keyboard-first navigation"],
-      stack: ["Next.js", "WebSockets", "Postgres"],
-      links: { repo: "", live: "", video: "" },
-      image: "", cover: { kind: "chart", palette: "blue" }, shape: "wide",
-    },
-    {
-      id: "eval-harness", title: "Eval Harness", category: "ml", year: "2026",
-      summary: "Benchmarks prompts, skills and models side by side, and fails CI on regressions.",
-      details: ["40+ suites with golden answers and rubric graders", "Compares models and prompt versions in one report", "Runs on every pull request"],
-      stack: ["Python", "Evals", "GitHub Actions"],
-      links: { repo: "", live: "", video: "" },
-      image: "", cover: { kind: "chart", palette: "amber" }, shape: "tall",
-    },
-    {
-      id: "rag-qa", title: "RAG Q&A", category: "ml", year: "2025",
-      summary: "Retrieval-augmented Q&A over course materials, where every answer carries citations.",
-      details: ["Hybrid search: keywords + embeddings", "Answers refuse when sources are missing", "Measured with a groundedness eval"],
-      stack: ["Embeddings", "FastAPI", "Evals"],
-      links: { repo: "", live: "", video: "" },
-      image: "", cover: { kind: "chat", palette: "lemon" }, shape: "square",
-    },
-    {
-      id: "review-classifier", title: "Review Classifier", category: "ml", year: "2024",
-      summary: "Fine-tuned a small transformer to classify product reviews, reaching 92% F1.",
-      details: ["Cleaned and labelled 18k reviews", "Beat the TF-IDF baseline by 11 points", "Served behind a tiny FastAPI endpoint"],
-      stack: ["PyTorch", "Transformers", "pandas"],
-      links: { repo: "", live: "", video: "" },
-      image: "", cover: { kind: "poster", palette: "peach", text: "F1 92%" }, shape: "wide",
-    },
-  ],
-
-  /* -------------------------------------------------------------------
-     SKILLS & PLUGINS LAB: each item gets a live terminal demo, its
-     source and an optional video. Demo step types:
-       prompt  → typed by the "user"        skill → skill loads
-       tool    → a tool call with a result   h     → bold heading line
-       list    → "type|text" rows (warn, info, ok, feat, fix, break)
-       done    → final success line
-     ------------------------------------------------------------------- */
-  skills: [
-    {
-      id: "pr-review", command: "/pr-review", kind: "Skill",
-      summary: "Reviews a PR like a senior dev: risks, tests, style.",
-      project: "pr-review",
-      video: "", // TODO: "https://youtu.be/..." or "assets/video/pr-review.mp4"
-      files: ["pr-review/", "├── SKILL.md", "├── checklist.md", "└── scripts/", "    └── diff_stats.py"],
-      lang: "md",
-      source: [
-        "---",
-        "name: pr-review",
-        "description: Reviews a GitHub pull request like a senior engineer. Use when the user asks to review a PR, check a diff, or wants feedback before merging.",
-        "---",
-        "",
-        "# PR Review",
-        "",
-        "## Steps",
-        "1. Fetch the diff with `gh pr diff <number>`.",
-        "2. Read every changed file in full, not just the hunks.",
-        "3. Run the tests that cover the changed code.",
-        "4. Check against `checklist.md`: correctness, security, tests, style.",
-        "5. Post one summary comment plus inline comments.",
-        "",
-        "## Rules",
-        "- Lead with risks, then suggestions. Skip nitpicks a linter catches.",
-        "- Every comment points to a file and a line.",
-      ].join("\n"),
-      demo: [
-        { t: "prompt", text: "/pr-review 128" },
-        { t: "skill", text: "pr-review" },
-        { t: "tool", name: "Bash", arg: "gh pr diff 128", out: "+214 −37 · 6 files" },
-        { t: "tool", name: "Read", arg: "src/auth/session.ts", out: "182 lines" },
-        { t: "tool", name: "Bash", arg: "npm test -- session", out: "24 passed" },
-        { t: "h", text: "Review summary" },
-        { t: "list", items: ["warn|`session.ts:42`: refresh token can race across two tabs", "info|`api/user.ts:88`: validate `email` before the DB call", "ok|New branch logic is covered by tests"] },
-        { t: "done", text: "Posted review to PR #128 · 1 risk, 1 suggestion · 41s" },
-      ],
-    },
-    {
-      id: "release-notes", command: "/release-notes", kind: "Skill",
-      summary: "Drafts release notes and a changelog from merged PRs.",
-      project: "release-notes",
-      video: "",
-      files: ["release-notes/", "├── SKILL.md", "└── templates/", "    └── notes.md"],
-      lang: "md",
-      source: [
-        "---",
-        "name: release-notes",
-        "description: Drafts release notes and a CHANGELOG entry from PRs merged since the last tag. Use when preparing a release or when asked what changed.",
-        "---",
-        "",
-        "# Release Notes",
-        "",
-        "## Steps",
-        "1. Find the last tag with `git describe --tags --abbrev=0`.",
-        "2. List PRs merged since then with `gh pr list --state merged`.",
-        "3. Group changes: Features, Fixes, Breaking, Internal.",
-        "4. Write user-facing notes in plain language and link every PR.",
-        "5. Update `CHANGELOG.md` and show the diff before committing.",
-      ].join("\n"),
-      demo: [
-        { t: "prompt", text: "/release-notes v2.4.0" },
-        { t: "skill", text: "release-notes" },
-        { t: "tool", name: "Bash", arg: "git describe --tags --abbrev=0", out: "v2.3.1" },
-        { t: "tool", name: "Bash", arg: "gh pr list --state merged", out: "17 PRs" },
-        { t: "tool", name: "Edit", arg: "CHANGELOG.md", out: "+42 lines" },
-        { t: "h", text: "v2.4.0 highlights" },
-        { t: "list", items: ["feat|Dark mode for the dashboard (#212)", "fix|CSV export keeps non-ASCII names intact (#219)", "break|`/v1/report` removed, use `/v2/report` (#224)"] },
-        { t: "done", text: "Drafted notes for v2.4.0 · 17 PRs in 3 sections" },
-      ],
-    },
-    {
-      id: "team-toolkit", command: "team-toolkit", kind: "Plugin",
-      summary: "Skills, commands, a subagent and hooks in one install.",
-      project: "team-toolkit",
-      video: "",
-      files: ["team-toolkit/", "├── .claude-plugin/", "│   └── plugin.json", "├── skills/", "│   ├── pr-review/SKILL.md", "│   └── release-notes/SKILL.md", "├── commands/standup.md", "├── agents/test-writer.md", "└── hooks/hooks.json"],
-      lang: "json",
-      source: [
-        "{",
-        "  \"name\": \"team-toolkit\",",
-        "  \"version\": \"1.2.0\",",
-        "  \"description\": \"Our team's skills, commands and hooks in one install.\",",
-        "  \"author\": { \"name\": \"Muq\" },",
-        "  \"keywords\": [\"review\", \"release\", \"standup\"]",
-        "}",
-      ].join("\n"),
-      demo: [
-        { t: "prompt", text: "/plugin install team-toolkit" },
-        { t: "tool", name: "Plugin", arg: "team-toolkit@1.2.0", out: "installed" },
-        { t: "h", text: "Added to this session" },
-        { t: "list", items: ["ok|`/pr-review`: skill", "ok|`/release-notes`: skill", "ok|`/standup`: command", "ok|`test-writer`: subagent", "ok|`format-on-save`: hook"] },
-        { t: "prompt", text: "/standup" },
-        { t: "tool", name: "Bash", arg: "git log --since=yesterday", out: "6 commits" },
-        { t: "done", text: "Standup drafted from 6 commits · ready to post" },
-      ],
-    },
-    {
-      id: "db-explorer", command: "db-explorer", kind: "MCP server",
-      summary: "Lets agents safely explore and query Postgres.",
-      project: "db-explorer",
-      video: "",
-      files: ["db-explorer/", "├── server.py", "├── pyproject.toml", "└── README.md"],
-      lang: "py",
-      source: [
-        "from mcp.server.fastmcp import FastMCP",
-        "",
-        "mcp = FastMCP(\"db-explorer\")",
-        "",
-        "@mcp.tool()",
-        "def describe_table(name: str) -> dict:",
-        "    \"\"\"Columns, types and row count for a table.\"\"\"",
-        "    return db.describe(name)",
-        "",
-        "@mcp.tool()",
-        "def run_query(sql: str) -> list[dict]:",
-        "    \"\"\"Run a read-only SELECT (max 200 rows).\"\"\"",
-        "    if not is_read_only(sql):",
-        "        raise ValueError(\"Only SELECT statements are allowed\")",
-        "    return db.fetch(sql, limit=200)",
-      ].join("\n"),
-      demo: [
-        { t: "prompt", text: "Which customers churned last month?" },
-        { t: "tool", name: "db-explorer", arg: "describe_table(\"customers\")", out: "12 cols · 48,210 rows" },
-        { t: "tool", name: "db-explorer", arg: "run_query(\"SELECT … churned_at\")", out: "214 rows" },
-        { t: "h", text: "214 customers churned in October (−9% vs. September)" },
-        { t: "list", items: ["info|Top reason: pricing (38%)", "info|Most churn came from the Starter plan", "ok|Read-only query, capped at 200 rows"] },
-        { t: "done", text: "Answered with 2 MCP tool calls · 1.8s" },
-      ],
-    },
-  ],
-
-  // Sticky notes in the dark section: the problems your work solves.
-  notes: [
-    { text: "It keeps ignoring our code style.", color: "mint" },
-    { text: "PR reviews take forever…", color: "lavender" },
-    { text: "Can it read our database? Safely??", color: "peach" },
-    { text: "It doesn't know our internal tools.", color: "butter" },
-    { text: "Every release, same manual checklist.", color: "aqua" },
-  ],
-
-  // About → journey timeline. TODO: replace with your real history.
-  timeline: [
-    { when: "Now", title: "Building agent Skills & Plugins", org: "Independent", text: "Designing, testing and shipping skills, plugins and MCP servers for coding agents.", icon: "sparkles" },
-    { when: "20XX – 20XX", title: "Your most recent role", org: "Company · Lab · University", text: "One or two lines on what you did and the impact it had.", icon: "briefcase" },
-    { when: "20XX", title: "A project or award you're proud of", org: "Hackathon · Research · Open source", text: "Whatever best shows how you think and work.", icon: "trophy" },
-    { when: "20XX – 20XX", title: "Your degree", org: "Your university", text: "Major, relevant coursework, honours.", icon: "graduation" },
-  ],
-
-  // About → toolbox chips.
-  toolbox: [
-    ["AI & agents", ["Claude API", "Agent Skills", "Plugins", "MCP", "RAG", "Evals", "Prompt design"]],
-    ["Languages", ["Python", "TypeScript", "SQL", "Bash"]],
-    ["Web", ["React", "Next.js", "Node.js", "FastAPI", "Tailwind CSS"]],
-    ["Infra", ["Docker", "GitHub Actions", "PostgreSQL", "Vercel"]],
+  changelog: [
+    { date: '2026-10-28', tag: 'data', title: 'Automated the longest loop of wins', text: 'Built a script that turns every MaklomThai match into a who-beat-whom graph, finds the longest loop of wins with OR-Tools CP-SAT and proves no longer one exists. It runs every night and keeps the site up to date on its own. The current loop has 576 players.', service: 'maklomthai' },
+    { date: '2026-10', tag: 'shipped', title: 'Thailand Changelog goes live', text: 'A news pipeline on GitHub Actions and Pages that turns Thai news into bilingual patch notes, checked twelve times a day.', service: 'thai-changelog' },
+    { date: '2026-09', tag: 'cert', title: 'Huawei Cloud HCCDA – Tech Essentials', text: 'Certified Developer Associate, valid until September 2029.' },
+    { date: '2026', tag: 'research', title: 'First-author paper accepted at APSIPA ASC 2026', text: '“CCTV Water-Level Reading from Staff Gauges via Object Detection and Geometric Scale Fusion”. YOLOv8n and EfficientNet-B0 read flood gauges on live CCTV, deployed on five cameras in Phayao and Nan with a 5.7 cm daytime error against human readers.' },
+    { date: '2026-02', tag: 'shipped', title: 'MaklomThai launches', text: 'Thai Go rankings, match history and statistics, live on Vercel.', service: 'maklomthai' },
+    { date: '2025-12', tag: 'course', title: 'Urban Issue Forecasting System', text: 'A team project for 2110403 Data Science and Data Engineering at Chulalongkorn University (CEDT). I built the dashboard’s forecast and anomaly views.', service: 'urban-issues' },
+    { date: '2025-05', tag: 'work', title: 'Data Scientist Intern, EGG Digital (Ascend Group)', text: 'Three months in the Media Convergence division: automated campaign reporting with Google Apps Script, from campaign CSVs to KPI Sheets and finished Slides decks, plus influencer-campaign tracking and Raspberry Pi signage.' },
+    { date: '2024', tag: 'edu', title: 'Started Computer Engineering at Chulalongkorn University', text: 'B.Eng. Computer Engineering & Digital Technology, Faculty of Engineering, expected 2028.' },
   ],
 };
