@@ -20,6 +20,7 @@
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const nf = new Intl.NumberFormat('en-US');
   const num = (n) => nf.format(Math.round(n));
+  const numD = (n, d = 0) => (d > 0 ? n.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }) : num(n));
   const P = S.profile || {};
   const L = P.links || {};
   const C = S.checks || {};
@@ -203,7 +204,7 @@
 
   /* ---------- count-up ---------- */
   function renderCount(el, v) {
-    el.textContent = `${el.dataset.prefix || ''}${num(v)}${el.dataset.suffix || ''}`;
+    el.textContent = `${el.dataset.prefix || ''}${numD(v, Number(el.dataset.dec) || 0)}${el.dataset.suffix || ''}`;
   }
   function countUp(el, to = Number(el.dataset.count), from = 0, dur = 1400) {
     if (!Number.isFinite(to)) return;
@@ -309,9 +310,9 @@
   const CHECKS = [
     { id: 'mt', service: 'maklomthai', name: (C.maklomthai || {}).label || 'MaklomThai API', sub: (C.maklomthai || {}).path || '' },
     { id: 'tc', service: 'thai-changelog', name: (C.changelog || {}).label || 'Thailand Changelog', sub: (C.changelog || {}).path || '' },
-    { id: 'ui', service: 'urban-issues' },
+    { id: 'paper', service: 'water-level' },
     { id: 'cert', service: 'hccda' },
-  ];
+  ].filter((c) => !c.service || c.service === 'hccda' || svcById(c.service));
   function checkAreas(c) {
     if (c.service === 'hccda') return ['cloud'];
     const s = svcById(c.service);
@@ -343,12 +344,20 @@
     const left = clamp((certUntil - Date.now()) / (certUntil - start), 0, 1);
     return `<svg viewBox="0 0 96 28"><rect x="0" y="11" width="96" height="6" rx="3" fill="var(--sunk)"/><rect x="${(96 * (1 - left)).toFixed(1)}" y="11" width="${(96 * left).toFixed(1)}" height="6" rx="3" fill="var(--ok)"/></svg>`;
   }
+  // The paper's headline percentage (its first % metric) as a bar.
+  function paperSVG() {
+    const s = svcById('water-level');
+    const m = s && (s.metrics || []).find((x) => x.suffix === '%');
+    if (!m) return '';
+    const w = (96 * clamp(m.value / 100, 0, 1)).toFixed(1);
+    return `<svg viewBox="0 0 96 28"><title>${esc(`${m.value}% of ${m.label}`)}</title><rect x="0" y="11" width="96" height="6" rx="3" fill="var(--sunk)"/><rect x="0" y="11" width="${w}" height="6" rx="3" fill="var(--a-data)"/></svg>`;
+  }
 
   function renderChecks() {
-    const ui = svcById('urban-issues');
+    const paper = svcById('water-level');
     $('#checks').innerHTML = CHECKS.map((c) => {
       let name = c.name, sub = c.sub;
-      if (c.id === 'ui' && ui) { name = ui.name; sub = `course project · ${ui.since}`; }
+      if (c.id === 'paper' && paper) { name = paper.name; sub = `paper · ${paper.venue || ''}`; }
       if (c.id === 'cert' && cert) { name = `${cert.issuer} HCCDA`; sub = 'certificate'; }
       return `<li class="check" data-check="${c.id}" data-areas="${checkAreas(c).join(' ')}">
         <span class="dot dot--pending"></span>
@@ -374,8 +383,8 @@
     // Thailand Changelog
     const nr = nextRun(now);
     setRow('tc', live.tcOk === null ? 'pending' : live.tcOk ? 'ok' : 'warn', `in ${until(nr - now, true)}`, slotsSVG(now));
-    // archived project and certificate
-    setRow('ui', 'off', 'Archived', '<svg viewBox="0 0 96 28"><line class="spark__base" x1="0" y1="14" x2="96" y2="14"/></svg>');
+    // research paper and certificate
+    setRow('paper', 'ok', 'Accepted', paperSVG());
     if (certUntil) setRow('cert', certUntil > now ? 'ok' : 'warn', certUntil > now ? 'Valid' : 'Expired', validitySVG());
   }
 
@@ -582,16 +591,21 @@
   /* =====================================================================
      SERVICES
      ===================================================================== */
+  const STATUS = {
+    operational: { cls: 'ok', dot: 'ok', label: 'Operational', spec: 'Operational, live' },
+    accepted: { cls: 'paper', dot: 'ok', label: 'Paper accepted', spec: 'Paper accepted' },
+    archived: { cls: 'off', dot: 'off', label: 'Archived', spec: 'Archived' },
+  };
+  const statusOf = (s) => STATUS[s.status] || STATUS.archived;
   function statusBadge(s) {
-    return s.status === 'operational'
-      ? '<span class="badge badge--ok"><span class="dot"></span>Operational</span>'
-      : '<span class="badge badge--off"><span class="dot"></span>Archived</span>';
+    const st = statusOf(s);
+    return `<span class="badge badge--${st.cls}"><span class="dot"></span>${st.label}</span>`;
   }
   const areaChips = (s) => `<ul class="areas">${s.areas.map((a) => `<li class="area a-${a}">${esc((S.areas.find((x) => x.id === a) || {}).label || a)}</li>`).join('')}</ul>`;
   function metricsHTML(s) {
     return (s.metrics || []).map((m) => {
       const v = m.live && liveVals[m.live] !== undefined ? liveVals[m.live] : m.value;
-      return `<div><dt>${esc(m.label)}</dt><dd data-count="${v}"${m.live ? ` data-live="${esc(m.live)}"` : ''}${m.prefix ? ` data-prefix="${esc(m.prefix)}"` : ''}${m.suffix ? ` data-suffix="${esc(m.suffix)}"` : ''}>${esc(m.prefix || '')}${num(v)}${esc(m.suffix || '')}</dd></div>`;
+      return `<div><dt>${esc(m.label)}</dt><dd data-count="${v}"${m.live ? ` data-live="${esc(m.live)}"` : ''}${m.dec ? ` data-dec="${m.dec}"` : ''}${m.prefix ? ` data-prefix="${esc(m.prefix)}"` : ''}${m.suffix ? ` data-suffix="${esc(m.suffix)}"` : ''}>${esc(m.prefix || '')}${numD(v, m.dec || 0)}${esc(m.suffix || '')}</dd></div>`;
     }).join('');
   }
   const shot = (src, theme) => src.replace('{theme}', theme);
@@ -609,67 +623,81 @@
       return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
     };
   }
-  function coverForecast() {
-    const R = rng(1500);
-    const x0 = 86, x1 = 386, xNow = 304, base = 120;
-    const n = 34, spikes = [8, 19, 28];
-    const pts = [];
-    for (let i = 0; i < n; i++) {
-      const x = x0 + ((xNow - x0) * i) / (n - 1);
-      let y = base - Math.sin(i / 4.6) * 16 - Math.sin(i / 1.9) * 5 - (R() - 0.5) * 16;
-      if (spikes.includes(i)) y -= 30;
-      pts.push([x, y]);
-    }
-    const up = [], dn = [], fc = [pts[n - 1]];
-    for (let j = 1; j <= 10; j++) {
-      const x = xNow + ((x1 - xNow) * j) / 10;
-      const y = base - Math.sin((n - 1 + j) / 4.6) * 16;
-      fc.push([x, y]);
-      up.push([x, y - 5 - j * 2.2]);
-      dn.push([x, y + 5 + j * 2.2]);
-    }
-    const d = (a) => a.map((p, i) => `${i ? 'L' : 'M'}${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' ');
+  /* Generated art for the water-level paper: a staff gauge in a river with the
+     detector's three boxes, plus small panels for the scale estimate and the
+     smoothed level. It's an illustration, not data. Everything that matters sits
+     between y 40 and 210, because the detail sheet crops the art to 16:7. */
+  function coverGauge() {
+    const R = rng(2026);
+    const u = 2.4, px = 118, yp = 62, yw = 190; // px per cm, pole x, plate top edge, waterline
+    const f = (n) => n.toFixed(1);
+    const d = (a) => a.map((p, i) => `${i ? 'L' : 'M'}${f(p[0])} ${f(p[1])}`).join(' ');
     const len = (a) => a.reduce((s, p, i) => (i ? s + Math.hypot(p[0] - a[i - 1][0], p[1] - a[i - 1][1]) : 0), 0);
-    const band = `M${xNow} ${pts[n - 1][1].toFixed(1)} ${up.map((p) => `L${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' ')} ${dn.reverse().map((p) => `L${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' ')} Z`;
-    let heat = '';
-    for (let r = 0; r < 3; r++) {
-      for (let c = 0; c < 24; c++) {
-        const near = spikes.some((s) => Math.abs(c - s * 0.7) < 1.5);
-        heat += `<rect class="cv-heat" x="${(86 + c * 12.5).toFixed(1)}" y="${200 + r * 13}" width="10.5" height="10.5" rx="2" fill-opacity="${(near ? 0.75 : 0.1 + R() * 0.45).toFixed(2)}"/>`;
-      }
-    }
-    const tabs = [['Map', 86, 40], ['Districts', 132, 62], ['Forecast', 200, 62, 1], ['Anomalies', 268, 70]];
+    const box = (cls, x, y, w, h, dl) => `<rect class="cv-box ${cls} cv-draw" x="${x}" y="${y}" width="${w}" height="${h}" rx="2" style="--len:${2 * (w + h)};--d:${dl}s"/>`;
+    const chip = (cls, x, y, label, dl, alignRight = true) => {
+      const w = label.length * 4.6 + 10;
+      const x0 = alignRight ? x - w : x;
+      return `<g class="cv-fade" style="--d:${dl}s"><rect class="${cls}" x="${f(x0)}" y="${y}" width="${f(w)}" height="12" rx="3"/><text class="cv-chip__t" x="${f(x0 + 5)}" y="${y + 8.6}">${label}</text></g>`;
+    };
+    // the gauge: 1 cm black strips every 2 cm, decade numbers, and the meter plate
+    let strips = '';
+    for (let k = -13; k <= 40; k++) strips += `<rect class="cv-strip" x="${px}" y="${f(yp + k * 2 * u)}" width="24" height="${u}"/>`;
+    const nums = [[-2, 20], [1, 90], [2, 80], [3, 70], [4, 60], [5, 50]]
+      .map(([j, n]) => `<text class="cv-num" x="${px + 38}" y="${f(yp + j * 10 * u + 3)}" text-anchor="end">${n}</text>`).join('');
+    const plate = `<rect class="cv-plate" x="104" y="${yp}" width="30" height="30" rx="1.5"/><text class="cv-digit" x="119" y="${yp + 24}" text-anchor="middle">2</text>`;
+    // the river, drawn over the pole so the part under water fades
+    let crest = '';
+    for (let x = -40; x < 440; x += 20) crest += ' q5 -2.2 10 0 q5 2.2 10 0';
+    const water = `<g class="cv-water"><path class="cv-water__body" d="M-40 ${yw}${crest} V252 H-40 Z"/><path class="cv-ripple" d="M-40 ${yw + 10}${crest}"/></g>`;
+    // the distance the level comes from: plate top edge down to the waterline
+    const dim = `<g class="cv-fade" style="--d:1.5s"><line class="cv-anchor" x1="134" y1="${yp}" x2="186" y2="${yp}"/><line class="cv-anchor" x1="166" y1="${yw}" x2="186" y2="${yw}"/><line class="cv-dim" x1="180" y1="${yp + 2}" x2="180" y2="${yw - 2}"/><path class="cv-dim" d="M177 ${yp + 6} l3 -4 l3 4 M177 ${yw - 6} l3 4 l3 -4"/><text class="cv-h" x="185" y="${(yp + yw) / 2 + 3}">Δ</text></g>`;
+    // panel 1: the strips' autocorrelation, peaking at the 2 cm pitch
+    const ac = [];
+    for (let t = 0; t <= 150; t += 2) ac.push([226 + t, 98 - 15 * Math.exp(-t / 120) * Math.cos((2 * Math.PI * t) / 26)]);
+    const peakY = 98 - 15 * Math.exp(-26 / 120);
+    const scale = `<rect class="cv-panel" x="214" y="50" width="174" height="70" rx="10"/>
+      <text class="cv-h" x="226" y="67">scale</text><text class="cv-txt" x="376" y="67" text-anchor="end">strip autocorrelation</text>
+      <line class="cv-guide" x1="252" y1="76" x2="252" y2="116"/>
+      <path class="cv-curve cv-draw" style="--len:${len(ac).toFixed(0)};--d:.4s" d="${d(ac)}"/>
+      <g class="cv-fade" style="--d:1.2s"><circle class="cv-peak" cx="252" cy="${f(peakY)}" r="2.6"/><text class="cv-acc" x="257" y="${f(peakY - 2)}">2 cm</text></g>`;
+    // panel 2: noisy per-frame readings and their causal median of five
+    const ys = [];
+    for (let i = 0; i < 22; i++) ys.push(182 - 9 * Math.sin(i / 4.5) - i * 0.35 + (R() - 0.5) * 5 + (i === 6 ? -15 : i === 14 ? 13 : 0));
+    const xs = (i) => 230 + i * 6.8;
+    const med = ys.map((_, i) => { const w = ys.slice(Math.max(0, i - 4), i + 1).sort((a, b) => a - b); return [xs(i), w[Math.floor(w.length / 2)]]; });
+    const level = `<rect class="cv-panel" x="214" y="128" width="174" height="74" rx="10"/>
+      <text class="cv-h" x="226" y="145">level</text><text class="cv-txt" x="376" y="145" text-anchor="end">causal median of 5</text>
+      ${ys.map((y, i) => `<circle class="cv-pt${i === 6 || i === 14 ? ' is-out' : ''}" cx="${f(xs(i))}" cy="${f(y)}" r="1.9"/>`).join('')}
+      <path class="cv-med cv-draw" style="--len:${len(med).toFixed(0)};--d:.8s" d="${d(med)}"/>`;
     return `<svg class="cover" viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <rect class="cv-bg" width="400" height="250"/>
-      <rect class="cv-side" x="-1" y="-1" width="66" height="252"/>
-      ${[40, 58, 76, 94, 112].map((y, i) => `<rect class="cv-tab${i === 2 ? ' is-on' : ''}" x="12" y="${y}" width="${i === 2 ? 42 : 34 - i * 2}" height="8" rx="4"/>`).join('')}
-      <circle cx="22" cy="20" r="7" class="cv-tab is-on"/>
-      ${tabs.map(([t, x, w, on]) => `<rect class="cv-tab${on ? ' is-on' : ''}" x="${x}" y="12" width="${w}" height="20" rx="10"/><text class="cv-txt${on ? ' is-on' : ''}" x="${x + w / 2}" y="25" text-anchor="middle">${t}</text>`).join('')}
-      ${[60, 92, 124, 156].map((y) => `<line class="cv-grid" x1="86" y1="${y}" x2="386" y2="${y}"/>`).join('')}
-      <path class="cv-band" d="${band}"/>
-      <line class="cv-now" x1="${xNow}" y1="48" x2="${xNow}" y2="184"/>
-      <text class="cv-txt" x="${xNow + 5}" y="56">forecast</text>
-      <path class="cv-actual cv-draw" style="--len:${len(pts).toFixed(0)}" d="${d(pts)}"/>
-      <path class="cv-fc cv-draw" style="--len:${len(fc).toFixed(0)}" d="${d(fc)}"/>
-      ${spikes.map((i) => `<circle class="cv-anom" cx="${pts[i][0].toFixed(1)}" cy="${pts[i][1].toFixed(1)}" r="5.5"/>`).join('')}
-      ${heat}
+      <rect class="cv-pole" x="${px}" y="-4" width="40" height="258"/>
+      ${strips}${nums}${plate}
+      ${water}
+      ${box('cv-box--g', 98, 50, 68, 146, 0)}${box('cv-box--p', 101, 58, 36, 38, 0.25)}${box('cv-box--w', 112, 184, 52, 12, 0.5)}
+      ${chip('cv-chip--g', 98, 38, 'staff gauge', 0.9, false)}${chip('cv-chip--p', 95, 58, 'meter plate', 1.05)}${chip('cv-chip--w', 95, 184, 'waterline', 1.2)}
+      ${dim}${scale}${level}
+      <g class="cv-rec"><circle cx="17" cy="17" r="3.2"/><text x="24" y="20">CCTV</text></g>
     </svg>`;
   }
+  const serviceCover = (s) => (s.cover === 'gauge' ? coverGauge() : '');
 
   function serviceMedia(s, feature) {
     const host = s.host || '';
     const view = s.shots && s.shots.length
       ? shotImgs(s.shots[0], false, feature ? '(min-width: 900px) 640px, 100vw' : '(min-width: 900px) 560px, 100vw')
-      : coverForecast();
+      : serviceCover(s);
     return `<div class="svc__media"><div class="frame">
-      <div class="frame__bar"><i></i><i></i><i></i><span class="frame__url mono">${icon(s.links && s.links.live ? 'lock' : 'terminal')}${esc(host)}</span></div>
+      <div class="frame__bar"><i></i><i></i><i></i><span class="frame__url mono">${icon(s.links && s.links.live ? 'lock' : s.status === 'accepted' ? 'file' : 'terminal')}${esc(host)}</span></div>
       <div class="frame__view">${view}</div>
     </div></div>`;
   }
   function serviceLinks(s, big = false) {
     const out = [];
-    if (s.links.live) out.push(`<a class="btn btn--ghost${big ? '' : ' btn--sm'}" href="${esc(s.links.live)}" ${ext}>Live site ${icon('arrow-up-right')}</a>`);
-    if (s.links.repo) out.push(`<a class="btn btn--ghost${big ? '' : ' btn--sm'}" href="${esc(s.links.repo)}" ${ext}>${icon('github')}${esc(s.links.repoLabel || 'Code')}</a>`);
+    const cls = `btn btn--ghost${big ? '' : ' btn--sm'}`;
+    if (s.links.live) out.push(`<a class="${cls}" href="${esc(s.links.live)}" ${ext}>Live site ${icon('arrow-up-right')}</a>`);
+    if (s.links.paper) out.push(`<a class="${cls}" href="${esc(s.links.paper)}" ${ext}>${icon('file')}Read the paper</a>`);
+    if (s.links.repo) out.push(`<a class="${cls}" href="${esc(s.links.repo)}" ${ext}>${icon('github')}${esc(s.links.repoLabel || 'Code')}</a>`);
     return out.join('');
   }
 
@@ -682,7 +710,7 @@
         <span class="svc__glow" aria-hidden="true"></span>
         ${serviceMedia(s, feature)}
         <div class="svc__body">
-          <div class="svc__top">${statusBadge(s)}<span class="svc__host mono">${esc(s.platform)} · since ${esc(s.since)}</span></div>
+          <div class="svc__top">${statusBadge(s)}<span class="svc__host mono">${esc(s.platform)} · ${esc(s.when || `since ${s.since}`)}</span></div>
           <div>
             <span class="svc__kicker">${esc(s.kicker)}</span>
             <h3 class="svc__title">${esc(s.name)}${s.native ? `<span class="th">${esc(s.native)}</span>` : ''}</h3>
@@ -1365,29 +1393,32 @@
     const s = svcById(id);
     if (!s) return;
     const conf = s.confirm || [];
+    const st = statusOf(s);
     const spec = [
       ['Role', esc(s.role) + (conf.includes('role') ? todoTag('Confirm your role') : '')],
-      ['Status', s.status === 'operational' ? 'Operational, live' : 'Archived'],
+      ['Status', esc(s.statusNote || st.spec)],
       ['Runs on', esc(s.platform)],
-      ['Since', esc(s.since) + (conf.includes('since') ? todoTag('Confirm the date') : '')],
+      s.since && ['Since', esc(s.since) + (conf.includes('since') ? todoTag('Confirm the date') : '')],
       s.course && ['Course', esc(s.course)],
       s.links.live && ['Address', `<a href="${esc(s.links.live)}" ${ext} class="mono" style="text-decoration:underline;text-underline-offset:2px">${esc(s.host)}</a>`],
+      ...(s.facts || []).map(([k, v]) => [esc(k), esc(v)]),
     ].filter(Boolean);
     const shots = s.shots || [];
     const gallery = shots.length
       ? `<div class="sh__gallery${shots.length === 1 ? ' sh__gallery--one' : ''}">${shots.map((sh) => `<figure><div class="frame"><div class="frame__bar"><i></i><i></i><i></i><span class="frame__url mono">${icon('lock')}${esc(s.host)}</span></div><div class="frame__view">${shotImgs(sh, false, '(min-width: 900px) 480px, 100vw')}</div></div><figcaption>${esc(sh.caption || '')}</figcaption></figure>`).join('')}</div>`
-      : `<div class="sh__gallery sh__gallery--one"><figure><div class="frame"><div class="frame__bar"><i></i><i></i><i></i><span class="frame__url mono">${icon('terminal')}${esc(s.host)}</span></div><div class="frame__view" style="aspect-ratio:16/7">${coverForecast()}</div></div><figcaption>Illustration. The dashboard ran locally in Streamlit, so there’s no live site to show.</figcaption></figure></div>`;
+      : `<div class="sh__gallery sh__gallery--one"><figure><div class="frame"><div class="frame__bar"><i></i><i></i><i></i><span class="frame__url mono">${icon(s.status === 'accepted' ? 'file' : 'terminal')}${esc(s.host)}</span></div><div class="frame__view" style="aspect-ratio:16/7">${serviceCover(s)}</div></div><figcaption>${esc(s.coverCaption || 'Illustration.')}</figcaption></figure></div>`;
     const links = [serviceLinks(s, true)];
     if (s.links.feeds) links.push(...s.links.feeds.map((f) => `<a class="btn btn--ghost" href="${esc(f.url)}" ${ext}>${icon('rss')}${esc(f.label)}</a>`));
     if (!s.links.repo && s.links.repoNote) links.push(`<span class="sh__private">${icon('lock')}${esc(s.links.repoNote)}${conf.includes('repo') ? todoTag('Link the code?') : ''}</span>`);
+    const linksHTML = links.join('');
     $('#sheetBody').innerHTML = `
-      <div class="sh__bar"><span class="dot dot--${s.status === 'operational' ? 'ok' : 'off'}"></span><span class="sh__path mono">${esc(P.host)}/services/${esc(s.id)}</span><button class="icon-btn" type="button" data-close aria-label="Close">${icon('x')}</button></div>
+      <div class="sh__bar"><span class="dot dot--${st.dot}"></span><span class="sh__path mono">${esc(P.host)}/services/${esc(s.id)}</span><button class="icon-btn" type="button" data-close aria-label="Close">${icon('x')}</button></div>
       <div class="sh__hero">
         <div class="svc__top">${statusBadge(s)}<span class="svc__host mono">${esc(s.kicker)}</span></div>
         <h2 class="sh__title" id="sheetTitle">${esc(s.name)}${s.native ? `<span class="th">${esc(s.native)}</span>` : ''}</h2>
         <p class="sh__tagline">${esc(s.tagline)}</p>
         ${areaChips(s)}
-        <div class="sh__links">${links.join('')}</div>
+        ${linksHTML ? `<div class="sh__links">${linksHTML}</div>` : ''}
       </div>
       ${gallery}
       <div class="sh__grid">

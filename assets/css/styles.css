@@ -137,6 +137,7 @@ kbd { font-family: var(--mono); font-size: 11px; line-height: 1; padding: 4px 6p
 .badge .dot { --dc: currentColor; width: 7px; height: 7px; }
 .badge--ok { --bc: var(--ok); --bcs: var(--ok-soft); }
 .badge--off { --bc: var(--off); --bcs: var(--off-soft); }
+.badge--paper { --bc: var(--a-data); --bcs: color-mix(in srgb, var(--a-data) 13%, transparent); }
 .badge--warn { --bc: var(--warn); --bcs: var(--warn-soft); }
 
 .a-fs { --kc: var(--a-fs); }
@@ -447,23 +448,44 @@ a.patch:hover { border-color: var(--line-2); }
 .t-concluded { --tc: var(--a-fs); }
 .t-news { --tc: var(--off); }
 
-/* generated cover (no screenshot) */
+/* generated cover (no screenshots): the water-level paper's staff gauge */
 .cover { position: absolute; inset: 0; width: 100%; height: 100%; }
 .cv-bg { fill: var(--surface); }
-.cv-side { fill: var(--surface-2); stroke: var(--line); }
-.cv-tab { fill: var(--sunk); }
-.cv-tab.is-on { fill: color-mix(in srgb, var(--a-data) 18%, var(--surface)); }
-.cv-txt { fill: var(--muted); font: 500 9px var(--mono); }
-.cv-txt.is-on { fill: var(--a-data); }
-.cv-grid { stroke: var(--line); stroke-width: 1; }
-.cv-band { fill: color-mix(in srgb, var(--a-data) 16%, transparent); }
-.cv-actual { fill: none; stroke: var(--ink-2); stroke-width: 1.8; stroke-linejoin: round; }
-.cv-fc { fill: none; stroke: var(--a-data); stroke-width: 2; stroke-dasharray: 5 4; stroke-linejoin: round; }
-.cv-now { stroke: var(--faint); stroke-dasharray: 3 3; }
-.cv-anom { fill: var(--bad-soft); stroke: var(--bad); stroke-width: 1.6; }
-.cv-heat { fill: var(--a-cloud); }
-.js .svc .cv-draw { stroke-dasharray: var(--len) var(--len); stroke-dashoffset: var(--len); transition: stroke-dashoffset 2.2s var(--ease) .3s; }
+.cv-txt { fill: var(--muted); font: 500 8.5px var(--mono); }
+.cv-h { fill: var(--ink); font: 600 9px var(--mono); }
+.cv-acc { fill: var(--a-data); font: 600 8.5px var(--mono); }
+.cv-pole { fill: light-dark(#F2C43B, #D6AB2D); }
+.cv-strip { fill: #1B1915; }
+.cv-num { fill: #1B1915; font: 700 7.5px var(--mono); }
+.cv-plate { fill: #FFFFFF; stroke: rgb(27 25 21 / .3); }
+.cv-digit { fill: #D3262E; font: 800 23px var(--display); }
+.cv-water { animation: cv-wave 5s linear infinite; }
+.cv-water__body { fill: color-mix(in srgb, var(--a-cloud) 26%, var(--surface)); fill-opacity: .9; stroke: var(--a-cloud); stroke-width: 1.4; }
+.cv-ripple { fill: none; stroke: var(--a-cloud); stroke-width: 1; opacity: .45; }
+@keyframes cv-wave { to { transform: translateX(-20px); } }
+.cv-box { fill: none; stroke-width: 1.6; }
+.cv-box--g { stroke: var(--ok); }
+.cv-box--p { stroke: var(--a-fs); }
+.cv-box--w { stroke: var(--bad); }
+.cv-chip--g { fill: var(--ok); }
+.cv-chip--p { fill: var(--a-fs); }
+.cv-chip--w { fill: var(--bad); }
+.cv-chip__t { fill: var(--bg); font: 600 7.5px var(--mono); }
+.cv-anchor { stroke: var(--faint); stroke-dasharray: 3 3; }
+.cv-dim { fill: none; stroke: var(--ink-2); stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; }
+.cv-panel { fill: var(--surface-2); stroke: var(--line); }
+.cv-curve { fill: none; stroke: var(--ink-2); stroke-width: 1.4; stroke-linejoin: round; }
+.cv-guide { stroke: var(--a-data); stroke-dasharray: 2 3; }
+.cv-peak { fill: var(--a-data); }
+.cv-pt { fill: var(--ink-2); fill-opacity: .4; }
+.cv-pt.is-out { fill: var(--bad); fill-opacity: .85; }
+.cv-med { fill: none; stroke: var(--a-data); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.cv-rec circle { fill: var(--bad); animation: blink 1.4s steps(1) infinite; }
+.cv-rec text { fill: var(--muted); font: 600 8px var(--mono); letter-spacing: .08em; }
+.js .svc .cv-draw { stroke-dasharray: var(--len) var(--len); stroke-dashoffset: var(--len); transition: stroke-dashoffset 1.6s var(--ease) calc(.3s + var(--d, 0s)); }
 .js .svc.is-in .cv-draw { stroke-dashoffset: 0; }
+.js .svc .cv-fade { opacity: 0; transition: opacity .6s var(--ease) calc(.3s + var(--d, 0s)); }
+.js .svc.is-in .cv-fade { opacity: 1; }
 
 /* ---------- pipelines ---------- */
 .pipes__tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }

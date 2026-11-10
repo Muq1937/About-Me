@@ -45,20 +45,25 @@ Everything a visitor reads comes from **[`assets/js/content.js`](assets/js/conte
 ```js
 {
   id: 'maklomthai', name: 'MaklomThai', native: 'หมากล้อมไทย', kicker: 'Thai Go rankings',
-  status: 'operational',            // or 'archived'
+  status: 'operational',            // or 'accepted' (a paper) or 'archived'
+  statusNote,                       // optional: replaces the status text in the detail sheet
   host, platform, since, role,
+  when,                             // optional: replaces "since …" on the card
   areas: ['fs', 'data', 'cloud'],
   tagline, summary: [], built: [], stack: [],
-  metrics: [{ value: 16108, label: 'match results', live: 'mt.totalMatches' }], // prefix/suffix optional
-  links: { live, repo, repoLabel, repoNote, feeds: [{ label, url }] },
+  metrics: [{ value: 16108, label: 'match results', live: 'mt.totalMatches' }], // prefix, suffix, dec optional
+  links: { live, paper, repo, repoLabel, repoNote, feeds: [{ label, url }] },
+  facts: [['Authors', '…']],        // optional extra rows in the sheet's spec
   shots: [{ src: 'assets/img/projects/maklomthai-rankings-{theme}.webp', alt, caption }],
-  cover: 'forecast',                // generated art when there are no shots
+  cover: 'gauge', coverCaption,     // generated art when there are no shots
   pipelines: ['maklomthai', 'winloop'],
   confirm: ['since', 'role'],       // fields shown with a TODO tag
 }
 ```
 
-`{theme}` in a screenshot path is replaced with `light` or `dark`, so each project needs both files. `live` names a value the checks refresh: `mt.totalMatches`, `mt.totalPlayers` or `tc.count`.
+`{theme}` in a screenshot path is replaced with `light` or `dark`, so each project needs both files. `live` names a value the checks refresh: `mt.totalMatches`, `mt.totalPlayers` or `tc.count`. `dec` sets decimal places, as in 5.7 cm.
+
+The research paper has no screenshots, so its card uses generated art of a staff gauge (`cover: 'gauge'`). The paper's PDF isn't hosted here because it includes a student email address. Put the proceedings link in `links.paper` once it's online.
 
 ### Pipelines
 
@@ -67,7 +72,7 @@ Each tab is one linear flow. A step has `label`, `sub`, `kind` (sets the colour:
 - `drop`: the share of the animated dots that stop at that step;
 - `paint`: the colour dots turn after it;
 - `live`: a fresh value for the inspector (`nextRun`, `feed`, `mtPing` or `mtBuilt`);
-- `mine: true`: marks my part of a team project.
+- `mine: true`: marks my part of a team project (no pipeline uses it right now).
 
 The dots and their counts are an illustration, and the page says so.
 
