@@ -100,6 +100,8 @@ Opening `index.html` directly also works. The live checks still run, because bot
 2. On GitHub, go to **Settings → Pages**, choose **Deploy from a branch**, then branch `main` and folder `/ (root)`.
 3. The site appears at `https://muq1937.github.io/About-Me/`, and each push redeploys it.
 
+GitHub Pages lets browsers keep each file for 10 minutes (`max-age=600`), and a normal reload doesn't fetch the scripts again. So whenever `styles.css`, `content.js` or `main.js` changes, change the `?v=` date on all three tags in `index.html` (for example `?v=2026-11-10` → `?v=2026-11-24`). Visitors then get the new files on their next reload. Add a letter for a second change on the same day (`?v=2026-11-24b`).
+
 ## What's inside
 
 - The overview console: live checks, a sparkline of response times, today's 12 scheduled runs and an event log.

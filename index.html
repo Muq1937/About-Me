@@ -19,7 +19,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://thaigotracker-backend.vercel.app" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&family=Noto+Sans+Thai:wght@400..700&display=swap">
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <!-- ?v= is a cache-buster: change it whenever styles.css, content.js or main.js changes -->
+  <link rel="stylesheet" href="assets/css/styles.css?v=2026-11-10">
   <script>
     (function () {
       var d = document.documentElement, t = null;
@@ -30,8 +31,8 @@
       setTimeout(function () { d.classList.add('is-ready'); }, 3000); // fail-safe if main.js can't run
     })();
   </script>
-  <script src="assets/js/content.js" defer></script>
-  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/content.js?v=2026-11-10" defer></script>
+  <script src="assets/js/main.js?v=2026-11-10" defer></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
