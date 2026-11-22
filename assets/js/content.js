@@ -28,7 +28,7 @@ window.SITE = {
     email: 'muqkung@gmail.com',
     links: {
       github: 'https://github.com/Muq1937',
-      linkedin: '',                // TODO: full LinkedIn URL
+      linkedin: 'https://www.linkedin.com/in/supanut-udompataikul-320557341/',
       // The résumé is kept off this site on purpose (it has a phone number). It links here instead.
     },
   },
