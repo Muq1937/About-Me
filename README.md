@@ -19,8 +19,8 @@ Both endpoints are public and send `Access-Control-Allow-Origin: *`. If a reques
 
 Two things are snapshots and need refreshing by hand:
 
-- **The win-loop dial** (`analysis.loop`): taken from `GET /api/funfact/loop` on 3 Nov 2026. The API response is 260 KB and includes player names, so the page embeds only what the dial needs: one character per player for dan level, head-to-head and last-win year. No names.
-- **Numbers written into the copy**, such as 576, 582 and 670.
+- **The win-loop dial** (`analysis.loop`): taken from `GET /api/funfact/loop` on 22 Nov 2026 (solved 16 Nov). The API response is 260 KB and includes player names, so the page embeds only what the dial needs: one character per player for dan level, head-to-head and last-win year. No names.
+- **Numbers written into the copy**, such as 577, 583 and 675.
 
 ## Editing content
 
@@ -45,14 +45,14 @@ Everything a visitor reads comes from **[`assets/js/content.js`](assets/js/conte
 ```js
 {
   id: 'maklomthai', name: 'MaklomThai', native: 'หมากล้อมไทย', kicker: 'Thai Go rankings',
-  status: 'operational',            // or 'accepted' (a paper) or 'archived'
+  status: 'operational',            // or 'accepted' / 'presented' (a paper) or 'archived'
   statusNote,                       // optional: replaces the status text in the detail sheet
   host, platform, since, role,
   when,                             // optional: replaces "since …" on the card
   areas: ['fs', 'data', 'cloud'],
   tagline, summary: [], built: [], stack: [],
   metrics: [{ value: 16108, label: 'match results', live: 'mt.totalMatches' }], // prefix, suffix, dec optional
-  links: { live, paper, repo, repoLabel, repoNote, feeds: [{ label, url }] },
+  links: { live, paper, certificate, repo, repoLabel, repoNote, feeds: [{ label, url }] }, // certificate: a certifications id
   facts: [['Authors', '…']],        // optional extra rows in the sheet's spec
   shots: [{ src: 'assets/img/projects/maklomthai-rankings-{theme}.webp', alt, caption }],
   cover: 'gauge', coverCaption,     // generated art when there are no shots
@@ -63,7 +63,7 @@ Everything a visitor reads comes from **[`assets/js/content.js`](assets/js/conte
 
 `{theme}` in a screenshot path is replaced with `light` or `dark`, so each project needs both files. `live` names a value the checks refresh: `mt.totalMatches`, `mt.totalPlayers` or `tc.count`. `dec` sets decimal places, as in 5.7 cm.
 
-The research paper has no screenshots, so its card uses generated art of a staff gauge (`cover: 'gauge'`). The paper's PDF isn't hosted here because it includes a student email address. Put the proceedings link in `links.paper` once it's online.
+The research paper has no screenshots, so its card uses generated art of a staff gauge (`cover: 'gauge'`). `links.paper` points at the paper on Google Drive (the PDF isn't in this repo), and `links.certificate` opens the certificate of presentation.
 
 ### Pipelines
 
@@ -79,7 +79,7 @@ The dots and their counts are an illustration, and the page says so.
 ## Images
 
 - `assets/img/projects/*.webp`: 1200×750 screenshots of the live sites, in light and dark.
-- `assets/img/certs/huawei-hccda.webp` and `-thumb.webp`: the certificate. Its number is also shown as the credential ID, from `certifications[0].number`. Set that to `''` to hide it.
+- `assets/img/certs/*.webp` and `*-thumb.webp`: the certificates. The first entry in `certifications` (HCCDA) is featured with its seal and validity bar, and its number is shown as the credential ID (set `number` to `''` to hide it). The rest show as cards with a `verify` link, and `w`/`h` give each full image's size.
 - `assets/img/og.png`: the 1200×630 link preview. Regenerate it if the headline changes.
 
 ## Résumé

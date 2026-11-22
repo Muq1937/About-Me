@@ -384,7 +384,8 @@
     const nr = nextRun(now);
     setRow('tc', live.tcOk === null ? 'pending' : live.tcOk ? 'ok' : 'warn', `in ${until(nr - now, true)}`, slotsSVG(now));
     // research paper and certificate
-    setRow('paper', 'ok', 'Accepted', paperSVG());
+    const paper = svcById('water-level');
+    if (paper) setRow('paper', 'ok', statusOf(paper).row || 'Accepted', paperSVG());
     if (certUntil) setRow('cert', certUntil > now ? 'ok' : 'warn', certUntil > now ? 'Valid' : 'Expired', validitySVG());
   }
 
@@ -593,7 +594,8 @@
      ===================================================================== */
   const STATUS = {
     operational: { cls: 'ok', dot: 'ok', label: 'Operational', spec: 'Operational, live' },
-    accepted: { cls: 'paper', dot: 'ok', label: 'Paper accepted', spec: 'Paper accepted' },
+    accepted: { cls: 'paper', dot: 'ok', label: 'Paper accepted', spec: 'Paper accepted', row: 'Accepted' },
+    presented: { cls: 'paper', dot: 'ok', label: 'Paper presented', spec: 'Paper presented', row: 'Presented' },
     archived: { cls: 'off', dot: 'off', label: 'Archived', spec: 'Archived' },
   };
   const statusOf = (s) => STATUS[s.status] || STATUS.archived;
@@ -688,7 +690,7 @@
       ? shotImgs(s.shots[0], false, feature ? '(min-width: 900px) 640px, 100vw' : '(min-width: 900px) 560px, 100vw')
       : serviceCover(s);
     return `<div class="svc__media"><div class="frame">
-      <div class="frame__bar"><i></i><i></i><i></i><span class="frame__url mono">${icon(s.links && s.links.live ? 'lock' : s.status === 'accepted' ? 'file' : 'terminal')}${esc(host)}</span></div>
+      <div class="frame__bar"><i></i><i></i><i></i><span class="frame__url mono">${icon(s.links && s.links.live ? 'lock' : s.cover ? 'file' : 'terminal')}${esc(host)}</span></div>
       <div class="frame__view">${view}</div>
     </div></div>`;
   }
@@ -697,6 +699,7 @@
     const cls = `btn btn--ghost${big ? '' : ' btn--sm'}`;
     if (s.links.live) out.push(`<a class="${cls}" href="${esc(s.links.live)}" ${ext}>Live site ${icon('arrow-up-right')}</a>`);
     if (s.links.paper) out.push(`<a class="${cls}" href="${esc(s.links.paper)}" ${ext}>${icon('file')}Read the paper</a>`);
+    if (big && s.links.certificate) out.push(`<button class="${cls}" type="button" data-cert="${esc(s.links.certificate)}">${icon('award')}Certificate of presentation</button>`);
     if (s.links.repo) out.push(`<a class="${cls}" href="${esc(s.links.repo)}" ${ext}>${icon('github')}${esc(s.links.repoLabel || 'Code')}</a>`);
     return out.join('');
   }
@@ -1226,7 +1229,8 @@
      STACK, CERTIFICATE, CHANGELOG, CONTACT
      ===================================================================== */
   function usedBy(ids) {
-    return ids.map((id) => (id === 'site' ? 'this site' : id === 'hccda' ? 'certificate' : (svcById(id) || {}).name || id)).join(' · ');
+    const isCert = (id) => (S.certifications || []).some((c) => c.id === id);
+    return ids.map((id) => (id === 'site' ? 'this site' : isCert(id) ? 'certificate' : (svcById(id) || {}).name || id)).join(' · ');
   }
   function renderStack() {
     $('#stackGrid').innerHTML = S.stack.map((g, gi) => `<section class="deps a-${esc(g.area)}" data-reveal style="--rd:${gi * 90}ms" aria-label="${esc(g.title)}">
@@ -1278,7 +1282,19 @@
         <img src="${esc(cert.thumb)}" alt="" width="720" height="508" loading="lazy" decoding="async">
         <span>${icon('search')}View</span>
       </button>
-    </article>`;
+    </article>${credsHTML()}`;
+  }
+  // Every certificate after the featured one, as a row of cards.
+  function credsHTML() {
+    const rest = (S.certifications || []).slice(1);
+    if (!rest.length) return '';
+    return `<ul class="creds">${rest.map((c, i) => `<li class="cred" data-reveal style="--rd:${i * 70}ms">
+        <button class="cred__thumb" type="button" data-cert="${esc(c.id)}" aria-label="${esc(`View ${c.issuer}: ${c.name}`)}"><img src="${esc(c.thumb)}" alt="" loading="lazy" decoding="async"></button>
+        <span class="cred__issuer">${esc(c.issuer)}</span>
+        <h3 class="cred__name">${esc(c.name)}</h3>
+        <span class="cred__meta">${esc(c.level || '')}</span>
+        <span class="cred__foot"><span class="mono">${esc(dateLabel(c.issued))}</span>${c.verify ? `<a href="${esc(c.verify)}" ${ext}>Verify${icon('arrow-up-right')}</a>` : ''}</span>
+      </li>`).join('')}</ul>`;
   }
   function monthBars() {
     const end = certUntil.getTime();
@@ -1406,7 +1422,7 @@
     const shots = s.shots || [];
     const gallery = shots.length
       ? `<div class="sh__gallery${shots.length === 1 ? ' sh__gallery--one' : ''}">${shots.map((sh) => `<figure><div class="frame"><div class="frame__bar"><i></i><i></i><i></i><span class="frame__url mono">${icon('lock')}${esc(s.host)}</span></div><div class="frame__view">${shotImgs(sh, false, '(min-width: 900px) 480px, 100vw')}</div></div><figcaption>${esc(sh.caption || '')}</figcaption></figure>`).join('')}</div>`
-      : `<div class="sh__gallery sh__gallery--one"><figure><div class="frame"><div class="frame__bar"><i></i><i></i><i></i><span class="frame__url mono">${icon(s.status === 'accepted' ? 'file' : 'terminal')}${esc(s.host)}</span></div><div class="frame__view" style="aspect-ratio:16/7">${serviceCover(s)}</div></div><figcaption>${esc(s.coverCaption || 'Illustration.')}</figcaption></figure></div>`;
+      : `<div class="sh__gallery sh__gallery--one"><figure><div class="frame"><div class="frame__bar"><i></i><i></i><i></i><span class="frame__url mono">${icon(s.cover ? 'file' : 'terminal')}${esc(s.host)}</span></div><div class="frame__view" style="aspect-ratio:16/7">${serviceCover(s)}</div></div><figcaption>${esc(s.coverCaption || 'Illustration.')}</figcaption></figure></div>`;
     const links = [serviceLinks(s, true)];
     if (s.links.feeds) links.push(...s.links.feeds.map((f) => `<a class="btn btn--ghost" href="${esc(f.url)}" ${ext}>${icon('rss')}${esc(f.label)}</a>`));
     if (!s.links.repo && s.links.repoNote) links.push(`<span class="sh__private">${icon('lock')}${esc(s.links.repoNote)}${conf.includes('repo') ? todoTag('Link the code?') : ''}</span>`);
@@ -1445,11 +1461,18 @@
   function openCert(id) {
     const c = (S.certifications || []).find((x) => x.id === id) || cert;
     if (!c) return;
+    const featured = c === cert;
+    const alt = featured
+      ? `${c.issuer} ${c.program}: ${P.name}, ${c.name}, ${c.level}. Valid until ${fmtDate.format(certUntil)}.`
+      : `${c.issuer}: ${c.name}, awarded to ${P.name}${c.issued ? `, ${dateLabel(c.issued)}` : ''}.`;
+    const note = featured
+      ? (c.number ? `Credential ID ${esc(c.number)} · issued ${certIssued ? fmtMonthYear.format(certIssued) : '—'} · valid until ${fmtDate.format(certUntil)}` : 'The certificate number is blurred on purpose. Ask me for it if you’d like to verify it with Huawei.')
+      : `${esc(c.level || '')}${c.issued ? ` · issued ${esc(dateLabel(c.issued))}` : ''}${c.verify ? ` · <a href="${esc(c.verify)}" ${ext}>verify it</a>` : ''}`;
     $('#certDlgBody').innerHTML = `
       <div class="sh__bar"><span class="dot dot--ok"></span><span class="sh__path mono" id="certDlgTitle">${esc(c.issuer)} · ${esc(c.name)}</span><button class="icon-btn" type="button" data-close aria-label="Close">${icon('x')}</button></div>
-      <div class="cert-view">
-        <img src="${esc(c.image)}" width="1600" height="1129" alt="${esc(`${c.issuer} ${c.program}: ${P.name}, ${c.name}, ${c.level}. Valid until ${fmtDate.format(certUntil)}.`)}">
-        <p>${c.number ? `Credential ID ${esc(c.number)} · issued ${certIssued ? fmtMonthYear.format(certIssued) : '—'} · valid until ${fmtDate.format(certUntil)}` : 'The certificate number is blurred on purpose. Ask me for it if you’d like to verify it with Huawei.'}</p>
+      <div class="cert-view${(c.h || 0) > (c.w || 1) ? ' cert-view--tall' : ''}">
+        <img src="${esc(c.image)}" width="${c.w || 1600}" height="${c.h || 1129}" alt="${esc(alt)}">
+        <p>${note}</p>
       </div>`;
     openDialog($('#certDlg'));
   }
@@ -1465,7 +1488,7 @@
       ...S.pipelines.map((p) => ({ group: 'Pipelines', label: p.title, hint: p.schedule, icon: 'layers', run: () => { showPipe(p.id); go('#pipelines')(); } })),
       { group: 'Do', label: 'Toggle dark mode', hint: 'theme', icon: 'moon', run: () => toggleTheme() },
       { group: 'Do', label: 'Replay the loop of wins', hint: 'analysis', icon: 'replay', run: () => { go('#analysis')(); setTimeout(dial.replay, 500); } },
-      cert && { group: 'Do', label: 'View the certificate', hint: cert.name, icon: 'award', run: () => openCert(cert.id) },
+      ...(S.certifications || []).map((c) => ({ group: 'Certificates', label: c.name, hint: c.issuer, icon: 'award', run: () => openCert(c.id) })),
       P.email && { group: 'Do', label: 'Copy my email address', hint: P.email, icon: 'copy', run: copyEmail },
       ...S.services.filter((s) => s.links.live).map((s) => ({ group: 'Open', label: s.name, hint: s.host, icon: 'arrow-up-right', run: openUrl(s.links.live) })),
       L.github && { group: 'Open', label: 'GitHub', hint: L.github.replace(/^https?:\/\//, ''), icon: 'github', run: openUrl(L.github) },
