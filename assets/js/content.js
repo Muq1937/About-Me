@@ -572,6 +572,6 @@ window.SITE = {
     { date: '2026-09', tag: 'cert', title: 'Huawei Cloud HCCDA – Tech Essentials', text: 'Certified Developer Associate, valid until September 2029.' },
     { date: '2026-02', tag: 'shipped', title: 'MaklomThai launches', text: 'Thai Go rankings, match history and statistics, live on Vercel.', service: 'maklomthai' },
     { date: '2025-05', tag: 'work', title: 'Data Scientist Intern, EGG Digital (Ascend Group)', text: 'Three months in the Media Convergence division: automated campaign reporting with Google Apps Script, from campaign CSVs to KPI Sheets and finished Slides decks, plus influencer-campaign tracking and Raspberry Pi signage.' },
-    { date: '2024', tag: 'edu', title: 'Started Computer Engineering at Chulalongkorn University', text: 'B.Eng. Computer Engineering & Digital Technology, Faculty of Engineering, expected 2028.' },
+    { date: '2024', tag: 'edu', title: 'Started Computer Engineering at Chulalongkorn University', text: 'B.Eng. Computer Engineering & Digital Technology, Faculty of Engineering, expected 2027.' },
   ],
 };
